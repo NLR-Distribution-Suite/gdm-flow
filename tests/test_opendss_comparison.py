@@ -179,6 +179,42 @@ def _get_common_buses(
     return matches
 
 
+def _verify_reference_center_tap_grounding(
+    system: DistributionSystem, master_dss: Path
+) -> None:
+    """Restore importer metadata only for source-verified grounded center taps."""
+    from gdm.systems.distribution.components import DistributionTransformer
+
+    transformers = [
+        transformer
+        for transformer in system.get_components(DistributionTransformer)
+        if any(
+            phase.value in {"S1", "S2"}
+            for group in transformer.winding_phases
+            for phase in group
+        )
+    ]
+    if not transformers:
+        return
+    reference = dss.NewContext()
+    reference.Text.Command(f'Compile "{master_dss}"')
+    names = {name.lower() for name in reference.Transformers.AllNames()}
+    for transformer in transformers:
+        assert transformer.name.lower() in names
+        reference.Circuit.SetActiveElement(f"Transformer.{transformer.name}")
+        buses = reference.CktElement.BusNames()
+        nodes = reference.CktElement.NodeOrder()
+        conductors = reference.CktElement.NumConductors()
+        assert len(buses) == len(transformer.equipment.windings) == 3
+        for index in (1, 2):
+            assert (
+                buses[index].split(".", 1)[0].lower()
+                == transformer.buses[index].name.lower()
+            )
+            assert 0 in nodes[index * conductors : (index + 1) * conductors]
+            transformer.equipment.windings[index].is_grounded = True
+
+
 # ─── Fixtures ────────────────────────────────────────────────────────────────
 
 
@@ -190,6 +226,7 @@ def model_data(request):
         system = DistributionSystem.from_json(str(gdm_path))
     except Exception as exc:
         pytest.skip(f"Cannot load GDM model {gdm_path.name}: {exc}")
+    _verify_reference_center_tap_grounding(system, dss_path)
     aggregate_single_phase_transformers(system)
     tap_positions = _extract_tap_positions(system)
     cap_states = _extract_cap_states(system)
