@@ -18,3 +18,7 @@ coverage.xml
 uv.lock
 venv/
 .venv/
+/plots/p1rhs7_pre_post_reduction/
+/plots/p1rhs7_primary_slider/
+/plots/p1rhs7_reduction_curve/
+/plots/p1rhs7_reduction_sweep/

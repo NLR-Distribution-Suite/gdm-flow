@@ -210,7 +210,8 @@ def test_stamp_transformer_two_winding_and_center_tap_paths():
         ],
         winding_phases=[[Phase.A], ["S1"], [Phase.N, "S2"]],
     )
-    ybus_mod._stamp_transformer(ybus, labels, center_tapped, include_neutral=False)
+    with pytest.raises(ValueError, match="center tap"):
+        ybus_mod._stamp_transformer(ybus, labels, center_tapped, include_neutral=False)
 
     assert np.max(np.abs(ybus)) > 0
 
@@ -222,6 +223,54 @@ def test_as_sparse_if_requested_false_and_true():
 
     assert isinstance(dense, np.ndarray)
     assert hasattr(sparse, "toarray")
+
+
+@pytest.mark.parametrize("no_load_loss", [0.0, 0.2, -1.0, np.nan])
+@pytest.mark.parametrize("pair_offset", [0, 1])
+def test_grounded_center_tap_matches_three_winding_primitive(no_load_loss, pair_offset):
+    from types import SimpleNamespace
+
+    windings = [
+        _Winding(7200, 25000, 1, VoltageTypes.LINE_TO_GROUND),
+        _Winding(120, 25000, 1, VoltageTypes.LINE_TO_GROUND),
+        _Winding(120, 25000, 1, VoltageTypes.LINE_TO_GROUND),
+    ]
+    for winding, resistance in zip(windings, (0.2, 0.4, 0.4)):
+        winding.resistance = resistance
+        winding.is_grounded = True
+        winding.connection_type = "STAR"
+    transformer = _Transformer(
+        [_Bus("primary"), _Bus("secondary"), _Bus("secondary")],
+        windings,
+        [[Phase.A], [Phase.N, Phase.S1], [Phase.N, Phase.S2]],
+    )
+    transformer.equipment.winding_reactances = [2, 2, 1]
+    transformer.equipment.pct_no_load_loss = no_load_loss
+    transformer.equipment.coupling_sequences = [
+        SimpleNamespace(from_index=first + pair_offset, to_index=second + pair_offset)
+        for first, second in ((0, 1), (0, 2), (1, 2))
+    ]
+    labels = {("primary", "A"): 0, ("secondary", "S1"): 1, ("secondary", "S2"): 2}
+    matrix = np.zeros((3, 3), dtype=complex)
+    if not np.isfinite(no_load_loss) or no_load_loss < 0:
+        with pytest.raises(ValueError, match="no-load loss"):
+            ybus_mod._stamp_transformer(matrix, labels, transformer, include_neutral=False)
+        return
+    ybus_mod._stamp_transformer(matrix, labels, transformer, include_neutral=False)
+    impedance_base = 7200**2 / 25000
+    leakage = impedance_base * np.array(
+        [0.002 + 0.015j, 0.004 + 0.005j, 0.004 + 0.005j]
+    )
+    conductance = 1 / leakage
+    primitive = (
+        np.diag(conductance) - np.outer(conductance, conductance) / conductance.sum()
+    )
+    turns = np.diag([1.0, 60.0, -60.0])
+    expected = turns @ primitive @ turns
+    expected[1, 1] += no_load_loss / 100 * 25000 / 120**2
+    np.testing.assert_allclose(
+        matrix, expected, rtol=1e-12, atol=1e-12
+    )
 
 
 def test_as_sparse_if_requested_raises_when_scipy_missing(monkeypatch):

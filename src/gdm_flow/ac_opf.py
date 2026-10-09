@@ -45,7 +45,11 @@ def _build_nominal_voltage_map(
 ) -> dict[BusPhaseLabel, float]:
     nominal: dict[BusPhaseLabel, float] = {}
     for bus in system.get_components(DistributionBus):
-        phase_voltage = _phase_voltage(bus.rated_voltage, bus.voltage_type)
+        phase_voltage = _phase_voltage(
+            bus.rated_voltage,
+            bus.voltage_type,
+            split_phase=any(_phase_name(phase) in {"S1", "S2"} for phase in bus.phases),
+        )
         for phase in bus.phases:
             nominal[(bus.name, _phase_name(phase))] = phase_voltage
     return nominal
@@ -74,6 +78,7 @@ def build_nodal_power_specs_from_components(
     solar_scale: float = 1.0,
     battery_scale: float = 1.0,
     capacitor_scale: float = 1.0,
+    skip_split_phase_delta: bool = False,
 ) -> tuple[dict[BusPhaseLabel, float], dict[BusPhaseLabel, float]]:
     """Build nodal active/reactive power specs from system components.
 
@@ -87,6 +92,16 @@ def build_nodal_power_specs_from_components(
     if include_loads:
         for load in system.get_components(DistributionLoad):
             if not load.in_service:
+                continue
+            phases = {_phase_name(phase) for phase in load.phases}
+            connection = getattr(
+                load.equipment.connection_type, "value", load.equipment.connection_type
+            )
+            if phases & {"S1", "S2"} and connection == "DELTA":
+                if phases != {"S1", "S2"} or not skip_split_phase_delta:
+                    raise ValueError(
+                        "Split-phase DELTA loads require connection-aware AC power flow, not fixed nodal P/Q."
+                    )
                 continue
             for phase, phase_load in zip(load.phases, load.equipment.phase_loads):
                 label = (load.bus.name, _phase_name(phase))

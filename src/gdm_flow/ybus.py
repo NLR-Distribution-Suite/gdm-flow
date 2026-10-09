@@ -191,6 +191,145 @@ def _stamp_branch(
         ybus[np.ix_(v_idx, v_idx)] += 0.5 * y_shunt
 
 
+SPLIT_PHASE_CONTRACT = "grounded-center-tap-v1"
+
+
+def _stamp_grounded_center_tap(
+    ybus: np.ndarray,
+    label_to_index: dict[BusPhaseLabel, int],
+    transformer: DistributionTransformer,
+    include_neutral: bool,
+) -> None:
+    windings = transformer.equipment.windings
+    phases = [
+        [_phase_name(phase) for phase in group] for group in transformer.winding_phases
+    ]
+    if include_neutral:
+        raise ValueError("Explicit-neutral split-phase stamping is not supported.")
+    if (
+        len(windings) != 3
+        or len(phases) != 3
+        or len(transformer.buses) != 3
+        or transformer.buses[1].name != transformer.buses[2].name
+        or len(phases[0]) != 1
+        or phases[0][0] not in {"A", "B", "C"}
+        or {frozenset(group) for group in phases[1:]}
+        != {frozenset({"N", "S1"}), frozenset({"N", "S2"})}
+    ):
+        raise ValueError(
+            "Split-phase stamping requires a single-primary, shared-bus center tap."
+        )
+    if any(not getattr(winding, "is_grounded", False) for winding in windings[1:]):
+        raise ValueError(
+            "Split-phase secondary windings require explicit grounded metadata."
+        )
+    no_load_loss = float(getattr(transformer.equipment, "pct_no_load_loss", 0))
+    if not np.isfinite(no_load_loss) or no_load_loss < 0:
+        raise ValueError("Split-phase no-load loss must be finite and nonnegative.")
+    if any(
+        winding.num_phases != 1
+        or getattr(winding.connection_type, "value", winding.connection_type) != "STAR"
+        for winding in windings
+    ):
+        raise ValueError(
+            "Split-phase stamping supports single-phase STAR windings only."
+        )
+    voltages = np.array(
+        [float(winding.rated_voltage.to("volt").magnitude) for winding in windings]
+    )
+    powers = np.array(
+        [float(winding.rated_power.to("va").magnitude) for winding in windings]
+    )
+    resistance = np.array([float(winding.resistance) for winding in windings]) / 100
+    if (
+        not np.all(np.isfinite(voltages))
+        or np.any(voltages <= 0)
+        or not np.all(np.isfinite(powers))
+        or np.any(powers <= 0)
+        or not np.all(np.isfinite(resistance))
+        or np.any(resistance < 0)
+    ):
+        raise ValueError("Invalid split-phase winding ratings or resistance.")
+    reactances = {}
+    for pair, value in zip(
+        transformer.equipment.coupling_sequences,
+        transformer.equipment.winding_reactances,
+        strict=True,
+    ):
+        key = tuple(sorted((pair.from_index, pair.to_index)))
+        if key in reactances or not np.isfinite(value) or value <= 0:
+            raise ValueError("Invalid split-phase pairwise reactances.")
+        reactances[key] = float(value) / 100
+    if set(reactances) == {(1, 2), (1, 3), (2, 3)}:
+        reactances = {
+            (first - 1, second - 1): value
+            for (first, second), value in reactances.items()
+        }
+    if set(reactances) != {(0, 1), (0, 2), (1, 2)}:
+        raise ValueError("All three split-phase pairwise reactances are required.")
+    primary_base = voltages[0] ** 2 / powers[0]
+    referred_resistance = resistance * voltages[0] ** 2 / powers
+    mutual = (reactances[(0, 1)] + reactances[(0, 2)] - reactances[(1, 2)]) / 2
+    impedance = np.array(
+        [
+            [
+                referred_resistance[0]
+                + referred_resistance[1]
+                + 1j * primary_base * reactances[(0, 1)],
+                referred_resistance[0] + 1j * primary_base * mutual,
+            ],
+            [
+                referred_resistance[0] + 1j * primary_base * mutual,
+                referred_resistance[0]
+                + referred_resistance[2]
+                + 1j * primary_base * reactances[(0, 2)],
+            ],
+        ]
+    )
+    if (
+        np.min(np.linalg.eigvalsh(impedance.imag)) <= 0
+        or np.linalg.cond(impedance) > 1e12
+    ):
+        raise ValueError(
+            "Split-phase leakage impedance must be passive and nonsingular."
+        )
+    taps = transformer.tap_positions
+    tap_values = []
+    for index, group in enumerate(phases):
+        if taps is None:
+            tap_values.append(1.0)
+        elif len(taps[index]) == 1:
+            tap_values.append(taps[index][0])
+        elif len(taps[index]) == len(group):
+            tap_values.append(
+                taps[index][
+                    next(
+                        position for position, phase in enumerate(group) if phase != "N"
+                    )
+                ]
+            )
+        else:
+            raise ValueError(
+                "Split-phase tap indexing does not match winding terminals."
+            )
+    tap_values = np.asarray(tap_values)
+    if not np.all(np.isfinite(tap_values)) or np.any(tap_values <= 0):
+        raise ValueError("Split-phase taps must be finite and positive.")
+    polarity = np.array(
+        [1.0, *[1.0 if "S1" in group else -1.0 for group in phases[1:]]]
+    )
+    ratios = polarity * voltages[0] / voltages / tap_values
+    incidence = np.array([[1.0, -1.0, 0.0], [1.0, 0.0, -1.0]]) * ratios
+    primitive = incidence.T @ np.linalg.solve(impedance, incidence)
+    primitive[1, 1] += no_load_loss / 100 * powers[0] / (voltages[1] * tap_values[1]) ** 2
+    labels = [
+        (transformer.buses[index].name, next(phase for phase in group if phase != "N"))
+        for index, group in enumerate(phases)
+    ]
+    indices = [label_to_index[label] for label in labels]
+    ybus[np.ix_(indices, indices)] += primitive
+
+
 def _stamp_transformer(
     ybus: np.ndarray,
     label_to_index: dict[BusPhaseLabel, int],
@@ -198,6 +337,14 @@ def _stamp_transformer(
     include_neutral: bool,
 ) -> None:
     if len(transformer.buses) < 2 or len(transformer.equipment.windings) < 2:
+        return
+
+    if any(
+        _phase_name(phase) in {"S1", "S2"}
+        for group in transformer.winding_phases
+        for phase in group
+    ):
+        _stamp_grounded_center_tap(ybus, label_to_index, transformer, include_neutral)
         return
 
     bus_u = transformer.buses[0]
@@ -255,99 +402,6 @@ def _stamp_transformer(
         ybus[j, j] += a * a * y
         ybus[i, j] -= a * y
         ybus[j, i] -= a * y
-
-    # Center-tapped (split-phase) transformer: primary phases (e.g. A/B/C) and
-    # secondary phases (e.g. S1/S2) have different names, so common_phases is
-    # empty.  Two cases:
-    #
-    # 1. Neutral node exists in Y-bus (include_neutral=True + bus has N):
-    #    Stamp the full 4-node model (P, S1, S2, N) directly.  This correctly
-    #    handles floating (ungrounded) center taps.
-    #
-    # 2. Neutral node absent: Kron-reduce the neutral as before.
-    if not common_phases and len(transformer.equipment.windings) >= 3:
-        num_sec = len(transformer.equipment.windings) - 1
-        primary_phases = [
-            p for p in transformer.winding_phases[0] if include_neutral or p != Phase.N
-        ]
-
-        # Check if neutral nodes exist for this transformer's secondary buses
-        _has_neutral_node = False
-        for w_idx in range(1, len(transformer.equipment.windings)):
-            bus_sec = (
-                transformer.buses[w_idx] if w_idx < len(transformer.buses) else bus_v
-            )
-            n_label = (bus_sec.name, "N")
-            if n_label in label_to_index:
-                _has_neutral_node = True
-                break
-
-        # Collect per-winding info
-        winding_info: list[tuple] = []
-        for w_idx in range(1, len(transformer.equipment.windings)):
-            bus_sec = (
-                transformer.buses[w_idx] if w_idx < len(transformer.buses) else bus_v
-            )
-            w_sec = transformer.equipment.windings[w_idx]
-            v_sec = _phase_voltage(w_sec.rated_voltage, w_sec.voltage_type)
-            if v_sec <= 0:
-                continue
-            a_w_base = v_u_phase / v_sec
-            y_w = y / num_sec
-            winding_phase_list = list(transformer.winding_phases[w_idx])
-            sec_phases = [
-                p for p in winding_phase_list if include_neutral or p != Phase.N
-            ]
-            # Center-tapped polarity: S1 is in-phase with primary (+1),
-            # S2 is anti-phase (-1).  The winding phase list ordering
-            # (e.g. ['N','S1'] vs ['S1','N']) is identical for both halves
-            # in most models, so we determine polarity from the signal
-            # phase name instead.
-            sig_phase = next((p for p in winding_phase_list if p != Phase.N), None)
-            if sig_phase == Phase.S2:
-                polarity = -1.0
-            else:
-                polarity = 1.0
-            winding_info.append((bus_sec, a_w_base, y_w, polarity, sec_phases, w_idx))
-
-        for p_phase in primary_phases:
-            u_label = (bus_u.name, _phase_name(p_phase))
-            if u_label not in label_to_index:
-                continue
-            i = label_to_index[u_label]
-            pri_idx = list(transformer.winding_phases[0]).index(p_phase)
-            tap_pri = tap_pos[0][pri_idx] if tap_pos is not None else 1.0
-
-            sec_nodes: list[tuple[int, float, float]] = []  # (j, a_w, y_w)
-            for bus_sec, a_w_base_w, y_w, polarity, sec_phases, w_idx in winding_info:
-                for s_phase in sec_phases:
-                    v_label = (bus_sec.name, _phase_name(s_phase))
-                    if v_label not in label_to_index:
-                        continue
-                    j = label_to_index[v_label]
-                    sec_idx = list(transformer.winding_phases[w_idx]).index(s_phase)
-                    tap_sec = tap_pos[w_idx][sec_idx] if tap_pos is not None else 1.0
-                    a_w = polarity * a_w_base_w * tap_pri / tap_sec
-                    # Primary-to-secondary stamps (same as before)
-                    ybus[i, i] += y_w
-                    ybus[i, j] -= a_w * y_w
-                    ybus[j, i] -= a_w * y_w
-                    # Kron-reduced diagonal: a²y/2 instead of a²y
-                    ybus[j, j] += a_w * a_w * y_w / 2.0
-                    sec_nodes.append((j, a_w, y_w))
-
-            # Add S1-S2 coupling from Kron-reduced neutral
-            for idx_a in range(len(sec_nodes)):
-                for idx_b in range(idx_a + 1, len(sec_nodes)):
-                    ja, a_wa, y_wa = sec_nodes[idx_a]
-                    jb, a_wb, y_wb = sec_nodes[idx_b]
-                    # Kron-reduced coupling = -|a_1|·|a_2|·(y_1+y_2)/4
-                    # Uses absolute turns ratios because the polarity sign
-                    # encodes the P-to-Sx direction but the coupling arises
-                    # from eliminating the shared neutral node.
-                    y_coupling = -(abs(a_wa) * abs(a_wb)) * (y_wa + y_wb) / 4.0
-                    ybus[ja, jb] += y_coupling
-                    ybus[jb, ja] += y_coupling
 
 
 def _as_sparse_if_requested(ybus: np.ndarray, sparse: bool):

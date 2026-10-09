@@ -25,6 +25,16 @@ def system():
 
 
 class TestUtils:
+    def test_split_phase_line_to_line_voltage_base(self):
+        from gdm.distribution.enums import VoltageTypes
+
+        voltage = MagicMock()
+        voltage.to.return_value.magnitude = 240.0
+        assert (
+            _phase_voltage(voltage, VoltageTypes.LINE_TO_LINE, split_phase=True)
+            == 120.0
+        )
+
     def test_phase_name_from_enum(self):
         from gdm.distribution.enums import Phase
 
@@ -101,3 +111,41 @@ class TestACPowerFlow:
         result = solve_ac_power_flow(system, tolerance=1e-5)
         if result.success:
             assert result.max_mismatch_pu < 1e-5
+
+
+def test_split_phase_delta_uses_terminal_pair_not_fixed_nodal_power(monkeypatch):
+    from gdm.distribution import DistributionSystem
+    from gdm.distribution.components import DistributionLoad
+    from gdm.distribution.enums import ConnectionType, Phase
+    from gdm_flow import ac_pf
+    from gdm_flow.ac_opf import build_nodal_power_specs_from_components
+
+    sample = DistributionLoad.example()
+    sample.bus.phases = [Phase.S2, Phase.S1]
+    equipment = type(sample.equipment)(
+        name="ll-equipment",
+        connection_type=ConnectionType.DELTA,
+        phase_loads=sample.equipment.phase_loads[:2],
+    )
+    sample = DistributionLoad(
+        name="ll-load", bus=sample.bus, phases=[Phase.S2, Phase.S1], equipment=equipment
+    )
+    system = DistributionSystem(name="ll-load", auto_add_composed_components=True)
+    system.add_component(sample)
+    with pytest.raises(ValueError, match="connection-aware"):
+        build_nodal_power_specs_from_components(system)
+    calls = []
+    monkeypatch.setattr(
+        ac_pf, "solve_ac_power_flow", lambda system, **options: calls.append(options)
+    )
+    ac_pf.solve_ac_power_flow_from_components(system, load_scale=0.5)
+    assert calls[0]["p_spec_w"] == {}
+    pair = ((sample.bus.name, "S1"), (sample.bus.name, "S2"))
+    expected = -0.5 * sum(
+        complex(
+            float(load.real_power.to("watt").magnitude),
+            float(load.reactive_power.to("var").magnitude),
+        )
+        for load in sample.equipment.phase_loads
+    )
+    assert calls[0]["line_to_line_power_specs"] == {pair: expected}

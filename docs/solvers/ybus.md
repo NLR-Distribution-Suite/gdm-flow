@@ -28,37 +28,31 @@ Center-tapped transformers have three windings: a primary (e.g. phase A at 7200 
 - **Winding 1**: phases `[S1, N]` — positive polarity
 - **Winding 2**: phases `[N, S2]` — reversed polarity
 
-Because primary phases (A/B/C) and secondary phases (S1/S2) have different names, the standard two-winding common-phase matching produces no connections. The center-tapped handler detects this case (empty `common_phases` with ≥ 3 windings) and stamps each secondary winding independently.
+The grounded center-tap handler constructs a coupled three-terminal primitive
+for the primary, S1 and S2. It uses all three pairwise leakage reactances, winding
+resistances, voltage/power ratings and tap positions; secondary paths are not
+treated as independent transformers with equally divided admittance.
 
-**Polarity detection.** The winding phase ordering determines voltage polarity relative to the primary. When the neutral (`N`) appears *before* the signal phase in the winding list (e.g. `[N, S2]`), the voltage at that node is antiphase — the effective turns ratio is negated:
+S1 has positive polarity and S2 negative polarity relative to the primary,
+regardless of secondary winding or bus-phase ordering. This gives the expected
+180-degree leg separation. Nonnegative no-load core loss is a conductance on
+the second winding, using its tap-adjusted voltage base. Independent OpenDSS
+fixtures check the primitive with asymmetric taps and nonzero no-load losses.
 
-$$a_{S2} = -\frac{V_{primary}}{V_{secondary}}$$
+#### Supported Scope
 
-This yields a 180° phase offset between S1 and S2 at the center tap, matching the physical behavior of a center-tapped service transformer.
+- Exactly three single-phase STAR windings: one A/B/C primary and two
+  secondaries sharing a bus, with terminal sets `{N, S1}` and `{N, S2}`.
+- Both secondary windings must declare `is_grounded=True`. Ground is an
+  implicit zero-voltage reference, not a solved neutral terminal.
+- `include_neutral=True`, floating center taps, unsupported winding layouts,
+  incomplete pairwise reactances and invalid ratings are rejected.
+- Complete zero-based or one-based winding-pair indices are accepted.
+- Split-phase line-to-line bus ratings use half the rating as the per-leg base.
 
-**Admittance splitting.** The total transformer leakage admittance $y$ is divided equally among secondary windings ($y_w = y / N_{sec}$) so that the parallel combination of all secondary paths equals the total admittance.
-
-**Neutral Node Handling (New in v0.5+)** — When `include_neutral=True`, the Y-bus automatically discovers split-phase secondary buses that have `Phase.N` in their winding phases but not in the bus's own `phases` list, and adds an explicit neutral (N) node for them. This ensures the center tap is represented in the admittance matrix rather than being silently Kron-reduced to ground.
-
-With an explicit neutral node present, the transformer uses **full 4-node stamping** (P, S1, S2, N) instead of Kron reduction. This correctly handles floating (ungrounded) center taps:
-
-$$
-\begin{bmatrix}
-  y & -a y & 0 & 0 \\
-  -a y & a^2 y & -a^2 y & 0 \\
-  0 & -a^2 y & a^2 y & 0 \\
-  0 & 0 & 0 & 0
-\end{bmatrix}
-$$
-
-Without a neutral node (legacy behavior or `include_neutral=False`), the neutral is Kron-reduced and the S1–S2 coupling terms are added explicitly.
-
-#### Assumptions
-
-- Each secondary winding is modeled as an independent two-winding transformer path from the primary. Mutual coupling between S1 and S2 secondaries is not modeled within the transformer itself (downstream branch impedance matrices may include S1–S2 coupling).
-- Winding polarity is inferred from the ordering of phases in the GDM `winding_phases` list: neutral before signal → reversed polarity.
-- The admittance is split equally across secondary windings ($y_w = y / N_{sec}$), assuming identical secondary winding ratings.
-- When the neutral node exists in Y-bus, it is held at 0 V (ground reference). This is enforced by marking N nodes as slack in the AC PF solver.
+The Y-bus does not silently infer grounded metadata. An external adapter such
+as gdm-reduce may explicitly assume grounding on a copy and record that policy;
+this does not establish physical grounding or modify the original model.
 
 ## Node Indexing
 
@@ -100,7 +94,7 @@ print(f"Nodes: {len(result.index_to_label)}")
 ```python
 result = calculate_ybus(
     system,
-    include_neutral=True,        # Include neutral phase nodes
+    include_neutral=False,       # Required for grounded S1/S2 services
     include_shunt=True,          # Include line charging (pi model)
     include_transformers=True,   # Include transformer admittance
     sparse=True,                 # Return scipy CSR matrix

@@ -15,7 +15,7 @@ import math
 import numpy as np
 
 from gdm.distribution import DistributionSystem
-from gdm.distribution.components import DistributionTransformer
+from gdm.distribution.components import DistributionLoad, DistributionTransformer
 from gdm.distribution.enums import Phase
 
 from ._utils import _phase_name
@@ -25,6 +25,8 @@ from .ac_opf import (
     build_nodal_power_specs_from_components,
 )
 from .ybus import BusPhaseLabel, YBusResult, calculate_ybus
+
+SPLIT_PHASE_POWER_FLOW_CONTRACT = "grounded-center-tap-pq-v1"
 
 
 @dataclass(frozen=True)
@@ -57,6 +59,8 @@ def solve_ac_power_flow(
     max_iterations: int = 100,
     tolerance: float = 1e-6,
     v0_complex: Dict[BusPhaseLabel, complex] | None = None,
+    line_to_line_power_specs: Dict[tuple[BusPhaseLabel, BusPhaseLabel], complex]
+    | None = None,
 ) -> ACPowerFlowResult:
     """Solve AC power flow using Newton-Raphson with sparse LU factorisation.
 
@@ -124,6 +128,34 @@ def solve_ac_power_flow(
         ybus_pu = sp.csr_matrix(ybus_si * scale)
 
     s_spec_pu = s_spec / s_base
+    line_to_line = []
+    for (first, second), power in (line_to_line_power_specs or {}).items():
+        if (
+            first == second
+            or first not in label_to_index
+            or second not in label_to_index
+            or not np.isfinite(power)
+        ):
+            raise ValueError(
+                "Line-to-line power requires distinct known terminals and finite VA."
+            )
+        line_to_line.append(
+            (label_to_index[first], label_to_index[second], complex(power))
+        )
+
+    def specified_power(voltage_pu):
+        specified = s_spec_pu.copy()
+        voltage = voltage_pu * v_base
+        for first, second, power in line_to_line:
+            difference = voltage[first] - voltage[second]
+            if abs(difference) < 1e-12:
+                raise ValueError(
+                    "Line-to-line load terminal voltage collapsed to zero."
+                )
+            conjugate_current = power / difference / s_base
+            specified[first] += voltage[first] * conjugate_current
+            specified[second] -= voltage[second] * conjugate_current
+        return specified
 
     # --- Slack bus identification ---
     if slack_label is None:
@@ -266,7 +298,7 @@ def solve_ac_power_flow(
         i_bus = ybus_pu @ v_pu
         s_calc = v_pu * np.conj(i_bus)
 
-        mismatch = s_calc[non_slack] - s_spec_pu[non_slack]
+        mismatch = s_calc[non_slack] - specified_power(v_pu)[non_slack]
         max_mis = max(
             float(np.max(np.abs(mismatch.real))) if m > 0 else 0.0,
             float(np.max(np.abs(mismatch.imag))) if m > 0 else 0.0,
@@ -306,6 +338,39 @@ def solve_ac_power_flow(
             ],
             format="csc",
         )
+        if line_to_line:
+            positions = {node: position for position, node in enumerate(non_slack)}
+            jac = jac.tolil()
+            voltage = v_pu * v_base
+            for first, second, power in line_to_line:
+                difference = voltage[first] - voltage[second]
+                derivatives = (
+                    power
+                    / difference**2
+                    / s_base
+                    * np.array(
+                        [
+                            [-voltage[second], voltage[first]],
+                            [voltage[second], -voltage[first]],
+                        ]
+                    )
+                )
+                for row_offset, row_node in enumerate((first, second)):
+                    for column_offset, column_node in enumerate((first, second)):
+                        if row_node not in positions or column_node not in positions:
+                            continue
+                        row = positions[row_node]
+                        column = positions[column_node]
+                        derivative = derivatives[row_offset, column_offset]
+                        angle_derivative = derivative * 1j * voltage[column_node]
+                        magnitude_derivative = (
+                            derivative * voltage[column_node] / vm_pu[column_node]
+                        )
+                        jac[row, column] -= angle_derivative.real
+                        jac[row + m, column] -= angle_derivative.imag
+                        jac[row, column + m] -= magnitude_derivative.real
+                        jac[row + m, column + m] -= magnitude_derivative.imag
+            jac = jac.tocsc()
 
         rhs = np.concatenate([mismatch.real, mismatch.imag])
         dx = spsolve(jac, -rhs)
@@ -321,7 +386,7 @@ def solve_ac_power_flow(
 
             v_trial = vm_trial * np.exp(1j * theta_trial)
             s_trial = v_trial * np.conj(ybus_pu @ v_trial)
-            mis_trial = s_trial[non_slack] - s_spec_pu[non_slack]
+            mis_trial = s_trial[non_slack] - specified_power(v_trial)[non_slack]
             new_mis = max(
                 float(np.max(np.abs(mis_trial.real))) if m > 0 else 0.0,
                 float(np.max(np.abs(mis_trial.imag))) if m > 0 else 0.0,
@@ -373,6 +438,7 @@ def solve_ac_power_flow_from_components(
     convert_geometry_to_matrix: bool = True,
     max_iterations: int = 100,
     tolerance: float = 1e-6,
+    v0_complex: Dict[BusPhaseLabel, complex] | None = None,
 ) -> ACPowerFlowResult:
     """Solve AC power flow with nodal specs auto-derived from system components.
 
@@ -390,7 +456,36 @@ def solve_ac_power_flow_from_components(
         solar_scale=solar_scale,
         battery_scale=battery_scale,
         capacitor_scale=capacitor_scale,
+        skip_split_phase_delta=True,
     )
+    line_to_line_power_specs = {}
+    if include_loads:
+        for load in system.get_components(DistributionLoad):
+            if not load.in_service or {_phase_name(phase) for phase in load.phases} != {
+                "S1",
+                "S2",
+            }:
+                continue
+            if (
+                getattr(
+                    load.equipment.connection_type,
+                    "value",
+                    load.equipment.connection_type,
+                )
+                != "DELTA"
+            ):
+                continue
+            pair = ((load.bus.name, "S1"), (load.bus.name, "S2"))
+            power = -load_scale * sum(
+                complex(
+                    float(phase_load.real_power.to("watt").magnitude),
+                    float(phase_load.reactive_power.to("var").magnitude),
+                )
+                for phase_load in load.equipment.phase_loads
+            )
+            line_to_line_power_specs[pair] = (
+                line_to_line_power_specs.get(pair, 0j) + power
+            )
 
     if slack_label is None:
         try:
@@ -411,4 +506,6 @@ def solve_ac_power_flow_from_components(
         convert_geometry_to_matrix=convert_geometry_to_matrix,
         max_iterations=max_iterations,
         tolerance=tolerance,
+        v0_complex=v0_complex,
+        line_to_line_power_specs=line_to_line_power_specs,
     )
