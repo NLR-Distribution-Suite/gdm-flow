@@ -37,7 +37,7 @@ MODEL_PATH = Path("examples/models/p5r.json")
 def system():
     if not MODEL_PATH.exists():
         pytest.skip("p5r.json model not found")
-    from gdm.distribution import DistributionSystem
+    from gdm.systems.distribution import DistributionSystem
 
     return DistributionSystem.from_json(str(MODEL_PATH))
 
@@ -268,7 +268,7 @@ class TestResizeConductorApply:
     """Test ResizeConductorStrategy.apply() using real GDM p5r model."""
 
     def test_apply_on_loading_violations(self, system):
-        from gdm.distribution.components.base.distribution_branch_base import (
+        from gdm.systems.distribution.components.base.distribution_branch_base import (
             DistributionBranchBase,
         )
 
@@ -295,7 +295,7 @@ class TestResizeConductorApply:
         assert branch.name in actions[0].component_name
 
     def test_apply_on_undervoltage_near_branch(self, system):
-        from gdm.distribution.components.base.distribution_branch_base import (
+        from gdm.systems.distribution.components.base.distribution_branch_base import (
             DistributionBranchBase,
         )
 
@@ -329,7 +329,7 @@ class TestResizeTransformerApply:
     """Test ResizeTransformerStrategy.apply() using real GDM p5r model."""
 
     def test_apply_on_transformer_loading(self, system):
-        from gdm.distribution.components import DistributionTransformer
+        from gdm.systems.distribution.components import DistributionTransformer
 
         xfmr = next(iter(system.get_components(DistributionTransformer)))
         report = ViolationReport(
@@ -401,7 +401,7 @@ class TestAddCapacitorApply:
     """Test capacitor strategy with real model (no capacitors in p5r)."""
 
     def test_apply_with_no_existing_capacitors(self, system):
-        from gdm.distribution.components import DistributionBus
+        from gdm.systems.distribution.components import DistributionBus
         from gdm_flow._utils import _phase_name
 
         # Get a non-source bus name

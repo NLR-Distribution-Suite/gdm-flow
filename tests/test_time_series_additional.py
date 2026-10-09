@@ -35,7 +35,7 @@ MODEL_PATH = Path("examples/models/p5r.json")
 def system():
     if not MODEL_PATH.exists():
         pytest.skip("p5r.json model not found")
-    from gdm.distribution import DistributionSystem
+    from gdm.systems.distribution import DistributionSystem
 
     return DistributionSystem.from_json(str(MODEL_PATH))
 
@@ -262,9 +262,7 @@ class TestTimestepExtraction:
 
     def test_build_nodal_specs_with_scales(self, system):
         p_base, _ = build_nodal_power_specs_at_timestep(system, 0)
-        p_scaled, _ = build_nodal_power_specs_at_timestep(
-            system, 0, load_scale=2.0
-        )
+        p_scaled, _ = build_nodal_power_specs_at_timestep(system, 0, load_scale=2.0)
         # Scaled loads should roughly double the demand
         if p_base:
             key = next(iter(p_base))

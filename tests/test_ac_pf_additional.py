@@ -19,14 +19,14 @@ MODEL_PATH = Path("examples/models/p5r.json")
 def system():
     if not MODEL_PATH.exists():
         pytest.skip("p5r.json model not found")
-    from gdm.distribution import DistributionSystem
+    from gdm.systems.distribution import DistributionSystem
 
     return DistributionSystem.from_json(str(MODEL_PATH))
 
 
 class TestUtils:
     def test_split_phase_line_to_line_voltage_base(self):
-        from gdm.distribution.enums import VoltageTypes
+        from gdm.systems.distribution.enums import VoltageTypes
 
         voltage = MagicMock()
         voltage.to.return_value.magnitude = 240.0
@@ -36,7 +36,7 @@ class TestUtils:
         )
 
     def test_phase_name_from_enum(self):
-        from gdm.distribution.enums import Phase
+        from gdm.systems.distribution.enums import Phase
 
         assert _phase_name(Phase.A) == "A"
         assert _phase_name(Phase.B) == "B"
@@ -48,7 +48,7 @@ class TestUtils:
         assert _phase_name("S1") == "S1"
 
     def test_phase_voltage_line_to_ground(self):
-        from gdm.distribution.enums import VoltageTypes
+        from gdm.systems.distribution.enums import VoltageTypes
 
         class _V:
             def to(self, unit):
@@ -58,7 +58,7 @@ class TestUtils:
         assert result == 120.0
 
     def test_phase_voltage_line_to_line(self):
-        from gdm.distribution.enums import VoltageTypes
+        from gdm.systems.distribution.enums import VoltageTypes
         import math
 
         class _V:
@@ -114,9 +114,9 @@ class TestACPowerFlow:
 
 
 def test_split_phase_delta_uses_terminal_pair_not_fixed_nodal_power(monkeypatch):
-    from gdm.distribution import DistributionSystem
-    from gdm.distribution.components import DistributionLoad
-    from gdm.distribution.enums import ConnectionType, Phase
+    from gdm.systems.distribution import DistributionSystem
+    from gdm.systems.distribution.components import DistributionLoad
+    from gdm.systems.distribution.enums import ConnectionType, Phase
     from gdm_flow import ac_pf
     from gdm_flow.ac_opf import build_nodal_power_specs_from_components
 

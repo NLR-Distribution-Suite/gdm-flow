@@ -32,7 +32,7 @@ def system():
     """Load the p5r model which has time series data."""
     if not MODEL_PATH.exists():
         pytest.skip("p5r.json model not found")
-    from gdm.distribution import DistributionSystem
+    from gdm.systems.distribution import DistributionSystem
 
     return DistributionSystem.from_json(str(MODEL_PATH))
 

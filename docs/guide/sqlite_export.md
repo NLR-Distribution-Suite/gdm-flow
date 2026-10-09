@@ -19,7 +19,7 @@ from gdm_flow import (
     solve_lindistflow,
     export_all_results_to_sqlite,
 )
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 system = DistributionSystem.from_json("model.json")
 ac = optimize_ac_power_flow_from_components(system)

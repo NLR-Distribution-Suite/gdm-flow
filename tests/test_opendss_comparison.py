@@ -20,8 +20,8 @@ import pytest
 opendssdirect = pytest.importorskip("opendssdirect")
 import opendssdirect as dss  # noqa: E402
 
-from gdm.distribution import DistributionSystem  # noqa: E402
-from gdm.distribution.utils import aggregate_single_phase_transformers  # noqa: E402
+from gdm.systems.distribution import DistributionSystem  # noqa: E402
+from gdm.systems.distribution.utils import aggregate_single_phase_transformers  # noqa: E402
 
 from gdm_flow import (  # noqa: E402
     solve_lindistflow,
@@ -58,7 +58,7 @@ if _p4u_dss.exists() and _p4u_gdm.exists():
 
 def _extract_tap_positions(system: DistributionSystem) -> Dict[str, list[float]]:
     """Extract transformer tap positions from a GDM system."""
-    from gdm.distribution.components import DistributionTransformer
+    from gdm.systems.distribution.components import DistributionTransformer
 
     taps: Dict[str, list[float]] = {}
     for xfmr in system.get_components(DistributionTransformer):
@@ -74,7 +74,7 @@ def _extract_tap_positions(system: DistributionSystem) -> Dict[str, list[float]]
 
 def _extract_cap_states(system: DistributionSystem) -> Dict[str, list[bool]]:
     """Extract capacitor switch states from a GDM system."""
-    from gdm.distribution.components import DistributionCapacitor
+    from gdm.systems.distribution.components import DistributionCapacitor
 
     states: Dict[str, list[bool]] = {}
     for cap in system.get_components(DistributionCapacitor):

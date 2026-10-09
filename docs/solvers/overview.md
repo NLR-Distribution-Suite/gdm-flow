@@ -1,6 +1,6 @@
 # Solver Overview
 
-GDM-Flow provides four power flow solvers, each suited to different analysis needs. All operate on `DistributionSystem` objects from grid-data-models and share the same Y-bus construction infrastructure.
+GDM-Flow provides four power flow solvers, each suited to different analysis needs. All operate on `DistributionSystem` objects from grid-data-models. AC PF, AC OPF, and DC OPF share Y-bus construction; LinDistFlow extracts branch impedances and transformer ratios directly.
 
 ## Solver Comparison
 
@@ -50,12 +50,24 @@ Use when you need **fast voltage drop estimates** on radial feeders. LinDistFlow
 - Large-scale parametric sweeps
 - Hosting capacity analysis
 
+## GDM 2.4 Equipment Scope
+
+Reactors use lumped series impedance, including in LinDistFlow. Station breaker,
+disconnector, and earthing-switch equipment use the supplied matrix-switch model
+and static phase states; protection trips and fault interruption are not simulated.
+AC solvers use the connection-aware two-winding station-transformer primitive,
+including vector-group orientation and internal floating STAR neutral elimination.
+DC OPF remains a small-angle approximation, not an independently validated
+station-transformer dispatch model. LinDistFlow remains a magnitude/ratio
+approximation and does not solve transformer phase shifts or floating neutrals.
+See [Y-Bus Construction](ybus.md) for supported equipment and rejected layouts.
+
 ## Common Workflow
 
 All solvers follow the same pattern:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 # 1. Load the system
 system = DistributionSystem.from_json("model.json")

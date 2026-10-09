@@ -1,6 +1,6 @@
 import numpy as np
 
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 
 def test_gdmloader_can_download_distribution_system(p5r_system):

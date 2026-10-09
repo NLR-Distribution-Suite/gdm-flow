@@ -9,7 +9,7 @@
       "name": "",
       "limit_type": "min",
       "__metadata__": {
-        "module": "gdm.distribution.common.limitset",
+        "module": "gdm.systems.distribution.common.limitset",
         "type": "VoltageLimitSet",
         "serialized_type": "base"
       },
@@ -28,7 +28,7 @@
       "name": "",
       "limit_type": "max",
       "__metadata__": {
-        "module": "gdm.distribution.common.limitset",
+        "module": "gdm.systems.distribution.common.limitset",
         "type": "VoltageLimitSet",
         "serialized_type": "base"
       },
@@ -67,14 +67,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "78a55f42-2aa3-4b67-8502-4407bcd03f8a"
@@ -82,7 +82,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "240bbe08-0435-40ce-9487-75f5113ebe73"
@@ -112,7 +112,7 @@
       "name": "",
       "limit_type": "min",
       "__metadata__": {
-        "module": "gdm.distribution.common.limitset",
+        "module": "gdm.systems.distribution.common.limitset",
         "type": "VoltageLimitSet",
         "serialized_type": "base"
       },
@@ -131,7 +131,7 @@
       "name": "",
       "limit_type": "max",
       "__metadata__": {
-        "module": "gdm.distribution.common.limitset",
+        "module": "gdm.systems.distribution.common.limitset",
         "type": "VoltageLimitSet",
         "serialized_type": "base"
       },
@@ -170,14 +170,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -185,7 +185,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -235,14 +235,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -250,7 +250,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -300,14 +300,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -315,7 +315,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -345,7 +345,7 @@
       "name": "",
       "limit_type": "min",
       "__metadata__": {
-        "module": "gdm.distribution.common.limitset",
+        "module": "gdm.systems.distribution.common.limitset",
         "type": "VoltageLimitSet",
         "serialized_type": "base"
       },
@@ -364,7 +364,7 @@
       "name": "",
       "limit_type": "max",
       "__metadata__": {
-        "module": "gdm.distribution.common.limitset",
+        "module": "gdm.systems.distribution.common.limitset",
         "type": "VoltageLimitSet",
         "serialized_type": "base"
       },
@@ -403,14 +403,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "23119d1d-3d2c-492b-9058-a0e694bc5661"
@@ -418,7 +418,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "8ebdfdc0-0958-446a-aeb7-2fbc70ff539a"
@@ -468,14 +468,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -483,7 +483,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -532,14 +532,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -547,7 +547,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -596,14 +596,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -611,7 +611,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -661,14 +661,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -676,7 +676,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -726,14 +726,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -741,7 +741,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -789,14 +789,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -804,7 +804,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -852,14 +852,14 @@
         "A"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -867,7 +867,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -917,14 +917,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -932,7 +932,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -982,14 +982,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -997,7 +997,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -1047,14 +1047,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -1062,7 +1062,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -1111,14 +1111,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_bus",
+        "module": "gdm.systems.distribution.components.distribution_bus",
         "type": "DistributionBus",
         "serialized_type": "base"
       },
       "voltagelimits": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "eb99d350-e011-4545-8f76-359ed1b38939"
@@ -1126,7 +1126,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.common.limitset",
+            "module": "gdm.systems.distribution.common.limitset",
             "type": "VoltageLimitSet",
             "serialized_type": "composed_component",
             "uuid": "1dee7511-d551-4ccc-94d1-5e175c3b50d3"
@@ -1156,7 +1156,7 @@
       "name": "5ab32ea9-c152-4845-8b9f-633fb8793ca6_1",
       "voltage_type": "line-to-ground",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_voltagesource_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_voltagesource_equipment",
         "type": "PhaseVoltageSourceEquipment",
         "serialized_type": "base"
       },
@@ -1220,7 +1220,7 @@
       "name": "5ab32ea9-c152-4845-8b9f-633fb8793ca6_2",
       "voltage_type": "line-to-ground",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_voltagesource_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_voltagesource_equipment",
         "type": "PhaseVoltageSourceEquipment",
         "serialized_type": "base"
       },
@@ -1284,7 +1284,7 @@
       "name": "5ab32ea9-c152-4845-8b9f-633fb8793ca6_3",
       "voltage_type": "line-to-ground",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_voltagesource_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_voltagesource_equipment",
         "type": "PhaseVoltageSourceEquipment",
         "serialized_type": "base"
       },
@@ -1347,14 +1347,14 @@
       "uuid": "44c44216-3ded-4662-b2b9-185528219332",
       "name": "5ab32ea9-c152-4845-8b9f-633fb8793ca6",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.voltagesource_equipment",
+        "module": "gdm.systems.distribution.equipment.voltagesource_equipment",
         "type": "VoltageSourceEquipment",
         "serialized_type": "base"
       },
       "sources": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_voltagesource_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_voltagesource_equipment",
             "type": "PhaseVoltageSourceEquipment",
             "serialized_type": "composed_component",
             "uuid": "d25b4573-be67-4e85-a459-747309707a77"
@@ -1362,7 +1362,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_voltagesource_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_voltagesource_equipment",
             "type": "PhaseVoltageSourceEquipment",
             "serialized_type": "composed_component",
             "uuid": "1340f92a-ffd7-4576-acb8-c0bc866444ea"
@@ -1370,7 +1370,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_voltagesource_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_voltagesource_equipment",
             "type": "PhaseVoltageSourceEquipment",
             "serialized_type": "composed_component",
             "uuid": "d5493034-e69b-4fc7-b1e1-4da3b0dbdd6a"
@@ -1390,13 +1390,13 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_vsource",
+        "module": "gdm.systems.distribution.components.distribution_vsource",
         "type": "DistributionVoltageSource",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "bce5c832-6ec9-44a2-b5ce-91540e8956a4"
@@ -1404,7 +1404,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.voltagesource_equipment",
+          "module": "gdm.systems.distribution.equipment.voltagesource_equipment",
           "type": "VoltageSourceEquipment",
           "serialized_type": "composed_component",
           "uuid": "44c44216-3ded-4662-b2b9-185528219332"
@@ -1417,7 +1417,7 @@
       "num_banks_on": 1,
       "num_banks": 1,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_capacitor_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_capacitor_equipment",
         "type": "PhaseCapacitorEquipment",
         "serialized_type": "base"
       },
@@ -1455,14 +1455,14 @@
       "connection_type": "STAR",
       "voltage_type": "line-to-line",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.capacitor_equipment",
+        "module": "gdm.systems.distribution.equipment.capacitor_equipment",
         "type": "CapacitorEquipment",
         "serialized_type": "base"
       },
       "phase_capacitors": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_capacitor_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_capacitor_equipment",
             "type": "PhaseCapacitorEquipment",
             "serialized_type": "composed_component",
             "uuid": "1e090288-01af-4eac-8e0f-57761386c384"
@@ -1470,7 +1470,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_capacitor_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_capacitor_equipment",
             "type": "PhaseCapacitorEquipment",
             "serialized_type": "composed_component",
             "uuid": "1e090288-01af-4eac-8e0f-57761386c384"
@@ -1478,7 +1478,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_capacitor_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_capacitor_equipment",
             "type": "PhaseCapacitorEquipment",
             "serialized_type": "composed_component",
             "uuid": "1e090288-01af-4eac-8e0f-57761386c384"
@@ -1508,13 +1508,13 @@
       ],
       "controllers": [],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_capacitor",
+        "module": "gdm.systems.distribution.components.distribution_capacitor",
         "type": "DistributionCapacitor",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "322f8a37-f1fe-4e3d-ba7b-7386e83e437e"
@@ -1522,7 +1522,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.capacitor_equipment",
+          "module": "gdm.systems.distribution.equipment.capacitor_equipment",
           "type": "CapacitorEquipment",
           "serialized_type": "composed_component",
           "uuid": "356d4ab9-ceff-4f4c-82aa-e27a80f8b237"
@@ -1540,7 +1540,7 @@
       "num_banks_on": 1,
       "num_banks": 1,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_capacitor_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_capacitor_equipment",
         "type": "PhaseCapacitorEquipment",
         "serialized_type": "base"
       },
@@ -1578,14 +1578,14 @@
       "connection_type": "STAR",
       "voltage_type": "line-to-ground",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.capacitor_equipment",
+        "module": "gdm.systems.distribution.equipment.capacitor_equipment",
         "type": "CapacitorEquipment",
         "serialized_type": "base"
       },
       "phase_capacitors": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_capacitor_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_capacitor_equipment",
             "type": "PhaseCapacitorEquipment",
             "serialized_type": "composed_component",
             "uuid": "47400176-f4d2-48a9-82b8-ab0673b16aca"
@@ -1613,13 +1613,13 @@
       ],
       "controllers": [],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_capacitor",
+        "module": "gdm.systems.distribution.components.distribution_capacitor",
         "type": "DistributionCapacitor",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "e7ce9c18-eecf-4dee-bffb-661ee61ea970"
@@ -1627,7 +1627,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.capacitor_equipment",
+          "module": "gdm.systems.distribution.equipment.capacitor_equipment",
           "type": "CapacitorEquipment",
           "serialized_type": "composed_component",
           "uuid": "8f6e97f6-03cb-4814-8640-e5703a106f0b"
@@ -1648,7 +1648,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -1682,7 +1682,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -1716,7 +1716,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -1744,14 +1744,14 @@
       "name": "b605cb89-e8c4-4454-bc3e-1cb750a2c817",
       "connection_type": "DELTA",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "137776e5-87d5-4dae-b39f-ec4554cccca6"
@@ -1759,7 +1759,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "62033218-eea5-4873-ae86-f9c1554c8110"
@@ -1767,7 +1767,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "eb934c29-853d-4429-8e0d-246fe17c0de6"
@@ -1787,13 +1787,13 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "82060842-61c9-41ca-8ead-f7cea0cc9a45"
@@ -1801,7 +1801,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "01627fc8-3a88-476a-a86a-5b397d59f319"
@@ -1819,7 +1819,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -1847,14 +1847,14 @@
       "name": "69a51a75-df41-49fb-92e3-839d978fdc16",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "2557a6e9-49ec-46ea-9c7d-353ac2fefa5e"
@@ -1872,13 +1872,13 @@
         "A"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "72c67063-1a64-4b16-ada9-c54cb403251b"
@@ -1886,7 +1886,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "b838977a-4890-41a9-96eb-ecae7c522479"
@@ -1904,7 +1904,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -1932,14 +1932,14 @@
       "name": "e3dc5a52-8f34-4864-8546-faf258734702",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "7bc59b0b-a67a-4c03-a723-5c25aa149ff5"
@@ -1957,13 +1957,13 @@
         "B"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "72c67063-1a64-4b16-ada9-c54cb403251b"
@@ -1971,7 +1971,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "4a0a331b-c115-494d-8ca2-bb60c3d31e33"
@@ -1989,7 +1989,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2017,14 +2017,14 @@
       "name": "3b489fa2-d489-43fa-aab7-daf3181aa92c",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "374204a5-eb58-431d-9878-e7d4746d0afc"
@@ -2042,13 +2042,13 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "72c67063-1a64-4b16-ada9-c54cb403251b"
@@ -2056,7 +2056,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "90911b1c-11b1-4e81-9b83-f61621ed1ba2"
@@ -2074,7 +2074,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2102,14 +2102,14 @@
       "name": "6de65438-a89c-458b-a33d-d65dc653b443",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "836808e5-13d8-4378-8e43-d1e363c78cfd"
@@ -2127,13 +2127,13 @@
         "B"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "39e39796-2090-4531-ba6b-820f37f961e0"
@@ -2141,7 +2141,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "60a0ddde-5ce7-4a91-83e4-298d1b8c75f8"
@@ -2159,7 +2159,7 @@
       "p_imag": 0.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2193,7 +2193,7 @@
       "p_imag": 0.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2221,14 +2221,14 @@
       "name": "ca8279a2-ae8b-459f-8ec4-eadd323b93d0",
       "connection_type": "DELTA",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "c7fe4717-6a3a-4d78-9c8c-571f94e23885"
@@ -2236,7 +2236,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "1a7444b2-5e5c-4c68-86ba-c48f518d50d1"
@@ -2255,13 +2255,13 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "0ee81c7e-bd7b-4c56-981b-2362b6468acf"
@@ -2269,7 +2269,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "1cbd35c3-4a63-4880-bc52-726b24681212"
@@ -2287,7 +2287,7 @@
       "p_imag": 0.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2321,7 +2321,7 @@
       "p_imag": 0.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2349,14 +2349,14 @@
       "name": "c7133cab-6aa7-4af3-a7f7-eb8e911c7c1f",
       "connection_type": "DELTA",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "855b430c-791b-4001-9c14-0c0fd8dac472"
@@ -2364,7 +2364,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "e8abe622-cdb9-446f-b7d6-0c5af3f8c5f8"
@@ -2383,13 +2383,13 @@
         "A"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "4430895a-05d2-486b-8942-f6a4f48837dd"
@@ -2397,7 +2397,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "c7d5d237-af7e-4ea5-a3bd-8e7004377f24"
@@ -2415,7 +2415,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2443,14 +2443,14 @@
       "name": "ee56f364-8086-4c67-960a-ea25c7dbd6d8",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "fef280e9-c76f-48bd-a9f0-221bf316a31a"
@@ -2468,13 +2468,13 @@
         "A"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "322f8a37-f1fe-4e3d-ba7b-7386e83e437e"
@@ -2482,7 +2482,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "74460838-7b03-4bfb-96be-5069437c0559"
@@ -2500,7 +2500,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2528,14 +2528,14 @@
       "name": "81b4e77e-98ec-4cbb-909d-19e14e76e0fa",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "1198b67e-a784-418e-89a7-44a7029b8343"
@@ -2553,13 +2553,13 @@
         "B"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "322f8a37-f1fe-4e3d-ba7b-7386e83e437e"
@@ -2567,7 +2567,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "152e4055-b12e-4e92-8bea-451ad96fbcb4"
@@ -2585,7 +2585,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2613,14 +2613,14 @@
       "name": "0e986a9b-36fd-4ffc-b3b2-0d980856e165",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "d8a51ee7-0461-496c-a45a-8ec80cb3e370"
@@ -2638,13 +2638,13 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "322f8a37-f1fe-4e3d-ba7b-7386e83e437e"
@@ -2652,7 +2652,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "b953f92e-4a99-4ce8-99c3-a2f5447f00c1"
@@ -2670,7 +2670,7 @@
       "p_imag": 0.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2698,14 +2698,14 @@
       "name": "576c52ac-d38e-45f6-83aa-81cadf9a475b",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "c2c9ef07-1e99-422c-87f3-da685cad34c7"
@@ -2723,13 +2723,13 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "e7ce9c18-eecf-4dee-bffb-661ee61ea970"
@@ -2737,7 +2737,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "3f7a6530-c66e-4a68-a18b-9c57d40e7667"
@@ -2755,7 +2755,7 @@
       "p_imag": 0.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2783,14 +2783,14 @@
       "name": "22675043-79de-4ce5-a48d-9c3fe365ab7f",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "1795f130-f276-4851-949b-855a2484358f"
@@ -2808,13 +2808,13 @@
         "A"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "a6373502-8523-4f33-acd7-81e99475c265"
@@ -2822,7 +2822,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "4294203b-d2bb-4bdb-87f3-a5e4d443429b"
@@ -2840,7 +2840,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2868,14 +2868,14 @@
       "name": "64d45e07-47bc-41a5-92cb-71306e6e0412",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "12ac17e8-cab1-4e1b-ad52-cc8740b32fd3"
@@ -2893,13 +2893,13 @@
         "A"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "26c72425-17ca-4330-b017-a6f04fe3cf8b"
@@ -2907,7 +2907,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "2e727bda-ca40-4d7a-8743-f9ad60697459"
@@ -2925,7 +2925,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -2953,14 +2953,14 @@
       "name": "0c555fb7-9693-4bf9-923a-d71921d2d5af",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "11571b41-7178-45ed-9457-04085f32cf9e"
@@ -2978,13 +2978,13 @@
         "B"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "26c72425-17ca-4330-b017-a6f04fe3cf8b"
@@ -2992,7 +2992,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "7c9f4735-09a9-409e-80dd-9a0cbdf83042"
@@ -3010,7 +3010,7 @@
       "p_imag": 1.0,
       "num_customers": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.phase_load_equipment",
+        "module": "gdm.systems.distribution.equipment.phase_load_equipment",
         "type": "PhaseLoadEquipment",
         "serialized_type": "base"
       },
@@ -3038,14 +3038,14 @@
       "name": "acec9671-82b4-489c-9d3b-f91e252f16c9",
       "connection_type": "STAR",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.load_equipment",
+        "module": "gdm.systems.distribution.equipment.load_equipment",
         "type": "LoadEquipment",
         "serialized_type": "base"
       },
       "phase_loads": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.phase_load_equipment",
+            "module": "gdm.systems.distribution.equipment.phase_load_equipment",
             "type": "PhaseLoadEquipment",
             "serialized_type": "composed_component",
             "uuid": "b1e15921-99ee-4fe9-bbb6-197010721067"
@@ -3063,13 +3063,13 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_load",
+        "module": "gdm.systems.distribution.components.distribution_load",
         "type": "DistributionLoad",
         "serialized_type": "base"
       },
       "bus": {
         "__metadata__": {
-          "module": "gdm.distribution.components.distribution_bus",
+          "module": "gdm.systems.distribution.components.distribution_bus",
           "type": "DistributionBus",
           "serialized_type": "composed_component",
           "uuid": "26c72425-17ca-4330-b017-a6f04fe3cf8b"
@@ -3077,7 +3077,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.load_equipment",
+          "module": "gdm.systems.distribution.equipment.load_equipment",
           "type": "LoadEquipment",
           "serialized_type": "composed_component",
           "uuid": "c8143bb2-e939-478e-bdc6-93f1c759635a"
@@ -3101,7 +3101,7 @@
       "min_tap_pu": 0.9,
       "max_tap_pu": 1.1,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "WindingEquipment",
         "serialized_type": "base"
       },
@@ -3141,7 +3141,7 @@
       "min_tap_pu": 0.9,
       "max_tap_pu": 1.1,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "WindingEquipment",
         "serialized_type": "base"
       },
@@ -3181,14 +3181,14 @@
       ],
       "is_center_tapped": false,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "DistributionTransformerEquipment",
         "serialized_type": "base"
       },
       "windings": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+            "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
             "type": "WindingEquipment",
             "serialized_type": "composed_component",
             "uuid": "f2ba5aa1-02d3-4fb8-a974-731427ef4e5a"
@@ -3196,7 +3196,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+            "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
             "type": "WindingEquipment",
             "serialized_type": "composed_component",
             "uuid": "81b7d343-420c-479a-ae8e-d9eece78a0f9"
@@ -3219,7 +3219,7 @@
       "min_tap_pu": 0.9,
       "max_tap_pu": 1.1,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "WindingEquipment",
         "serialized_type": "base"
       },
@@ -3259,14 +3259,14 @@
       ],
       "is_center_tapped": false,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "DistributionTransformerEquipment",
         "serialized_type": "base"
       },
       "windings": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+            "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
             "type": "WindingEquipment",
             "serialized_type": "composed_component",
             "uuid": "e5fcad64-7e3c-419f-9b2b-074c7d61d968"
@@ -3274,7 +3274,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+            "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
             "type": "WindingEquipment",
             "serialized_type": "composed_component",
             "uuid": "e5fcad64-7e3c-419f-9b2b-074c7d61d968"
@@ -3299,7 +3299,7 @@
       "min_tap_pu": 0.9,
       "max_tap_pu": 1.1,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "WindingEquipment",
         "serialized_type": "base"
       },
@@ -3339,7 +3339,7 @@
       "min_tap_pu": 0.9,
       "max_tap_pu": 1.1,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "WindingEquipment",
         "serialized_type": "base"
       },
@@ -3379,14 +3379,14 @@
       ],
       "is_center_tapped": false,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+        "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
         "type": "DistributionTransformerEquipment",
         "serialized_type": "base"
       },
       "windings": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+            "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
             "type": "WindingEquipment",
             "serialized_type": "composed_component",
             "uuid": "8bf8258d-80c4-48e1-b6b9-a732d991c446"
@@ -3394,7 +3394,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+            "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
             "type": "WindingEquipment",
             "serialized_type": "composed_component",
             "uuid": "1b7e3a59-b34c-42c7-a316-d67824ebcb02"
@@ -3421,14 +3421,14 @@
         ]
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_transformer",
+        "module": "gdm.systems.distribution.components.distribution_transformer",
         "type": "DistributionTransformer",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "bce5c832-6ec9-44a2-b5ce-91540e8956a4"
@@ -3436,7 +3436,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "d08df378-a97f-4b8f-aa9c-5261474b3089"
@@ -3445,7 +3445,7 @@
       ],
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+          "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
           "type": "DistributionTransformerEquipment",
           "serialized_type": "composed_component",
           "uuid": "79bcb24a-35d3-4bc9-aee9-e62d670f12f7"
@@ -3467,14 +3467,14 @@
         ]
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_transformer",
+        "module": "gdm.systems.distribution.components.distribution_transformer",
         "type": "DistributionTransformer",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "d08df378-a97f-4b8f-aa9c-5261474b3089"
@@ -3482,7 +3482,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "55774da9-b323-49c0-a17f-44719df7fe12"
@@ -3491,7 +3491,7 @@
       ],
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+          "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
           "type": "DistributionTransformerEquipment",
           "serialized_type": "composed_component",
           "uuid": "cd15b447-da2b-43c6-990a-3a7fcf29faa2"
@@ -3513,14 +3513,14 @@
         ]
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_transformer",
+        "module": "gdm.systems.distribution.components.distribution_transformer",
         "type": "DistributionTransformer",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "d08df378-a97f-4b8f-aa9c-5261474b3089"
@@ -3528,7 +3528,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "55774da9-b323-49c0-a17f-44719df7fe12"
@@ -3537,7 +3537,7 @@
       ],
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+          "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
           "type": "DistributionTransformerEquipment",
           "serialized_type": "composed_component",
           "uuid": "cd15b447-da2b-43c6-990a-3a7fcf29faa2"
@@ -3559,14 +3559,14 @@
         ]
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_transformer",
+        "module": "gdm.systems.distribution.components.distribution_transformer",
         "type": "DistributionTransformer",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "d08df378-a97f-4b8f-aa9c-5261474b3089"
@@ -3574,7 +3574,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "55774da9-b323-49c0-a17f-44719df7fe12"
@@ -3583,7 +3583,7 @@
       ],
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+          "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
           "type": "DistributionTransformerEquipment",
           "serialized_type": "composed_component",
           "uuid": "cd15b447-da2b-43c6-990a-3a7fcf29faa2"
@@ -3609,14 +3609,14 @@
         ]
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.distribution_transformer",
+        "module": "gdm.systems.distribution.components.distribution_transformer",
         "type": "DistributionTransformer",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "3cbb8dcb-5ed5-4f69-a780-efbd6a6859b6"
@@ -3624,7 +3624,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "72c67063-1a64-4b16-ada9-c54cb403251b"
@@ -3633,7 +3633,7 @@
       ],
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.distribution_transformer_equipment",
+          "module": "gdm.systems.distribution.equipment.distribution_transformer_equipment",
           "type": "DistributionTransformerEquipment",
           "serialized_type": "composed_component",
           "uuid": "0c644143-df6e-42ed-91a6-3f71dde04395"
@@ -3646,7 +3646,7 @@
       "construction": "OVERHEAD",
       "controller": null,
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_switch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_switch_equipment",
         "type": "MatrixImpedanceSwitchEquipment",
         "serialized_type": "base"
       },
@@ -3740,7 +3740,7 @@
       "name": "1",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -3834,7 +3834,7 @@
       "name": "2",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -3928,7 +3928,7 @@
       "name": "3",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4022,7 +4022,7 @@
       "name": "4",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4116,7 +4116,7 @@
       "name": "5",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4210,7 +4210,7 @@
       "name": "6",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4304,7 +4304,7 @@
       "name": "7",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4377,7 +4377,7 @@
       "name": "9",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4435,7 +4435,7 @@
       "name": "12",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4529,7 +4529,7 @@
       "name": "300",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4623,7 +4623,7 @@
       "name": "301",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4717,7 +4717,7 @@
       "name": "302",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4775,7 +4775,7 @@
       "name": "304",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4833,7 +4833,7 @@
       "name": "400",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -4927,7 +4927,7 @@
       "name": "601",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5021,7 +5021,7 @@
       "name": "602",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5115,7 +5115,7 @@
       "name": "603",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5188,7 +5188,7 @@
       "name": "604",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5261,7 +5261,7 @@
       "name": "606",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5355,7 +5355,7 @@
       "name": "607",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5413,7 +5413,7 @@
       "name": "721",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5507,7 +5507,7 @@
       "name": "722",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5601,7 +5601,7 @@
       "name": "723",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5695,7 +5695,7 @@
       "name": "724",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5789,7 +5789,7 @@
       "name": "mtx601",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5883,7 +5883,7 @@
       "name": "mtx602",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -5977,7 +5977,7 @@
       "name": "mtx603",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6050,7 +6050,7 @@
       "name": "mtx605",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6108,7 +6108,7 @@
       "name": "mtx606",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6202,7 +6202,7 @@
       "name": "mtx607",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6260,7 +6260,7 @@
       "name": "bfe97056-e567-4d5a-b1b2-245671993759",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6354,7 +6354,7 @@
       "name": "b6338dfc-7902-440a-a1f7-a0808d79f463",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6448,7 +6448,7 @@
       "name": "ed62d333-d6e9-4802-932f-d65649026366",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6521,7 +6521,7 @@
       "name": "332a3ce0-77ce-48a8-9a81-4cf8ee1f5c84",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6615,7 +6615,7 @@
       "name": "491736e6-ab20-46bf-9536-79259487f8d8",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6673,7 +6673,7 @@
       "name": "cb29a48e-b2dd-4021-817f-f64969431d9e",
       "construction": "OVERHEAD",
       "__metadata__": {
-        "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+        "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
         "type": "MatrixImpedanceBranchEquipment",
         "serialized_type": "base"
       },
@@ -6738,14 +6738,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "55774da9-b323-49c0-a17f-44719df7fe12"
@@ -6753,7 +6753,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "079abfec-4dbf-490b-9467-b69657b6c561"
@@ -6771,7 +6771,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "3f93e64e-3f94-438f-a5e7-d4563317dc6b"
@@ -6790,14 +6790,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "079abfec-4dbf-490b-9467-b69657b6c561"
@@ -6805,7 +6805,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "26c72425-17ca-4330-b017-a6f04fe3cf8b"
@@ -6823,7 +6823,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "3f93e64e-3f94-438f-a5e7-d4563317dc6b"
@@ -6842,14 +6842,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "26c72425-17ca-4330-b017-a6f04fe3cf8b"
@@ -6857,7 +6857,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "82060842-61c9-41ca-8ead-f7cea0cc9a45"
@@ -6875,7 +6875,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "3f93e64e-3f94-438f-a5e7-d4563317dc6b"
@@ -6894,14 +6894,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "82060842-61c9-41ca-8ead-f7cea0cc9a45"
@@ -6909,7 +6909,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "9cb3db58-1aa5-4e79-b98e-234b52c3d3a3"
@@ -6927,7 +6927,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "3f93e64e-3f94-438f-a5e7-d4563317dc6b"
@@ -6946,14 +6946,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "079abfec-4dbf-490b-9467-b69657b6c561"
@@ -6961,7 +6961,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "3cbb8dcb-5ed5-4f69-a780-efbd6a6859b6"
@@ -6979,7 +6979,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "b0283a3f-79ea-4de4-962f-26a4e5819e82"
@@ -6997,14 +6997,14 @@
         "B"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "079abfec-4dbf-490b-9467-b69657b6c561"
@@ -7012,7 +7012,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "39e39796-2090-4531-ba6b-820f37f961e0"
@@ -7030,7 +7030,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "1a60b877-adea-455c-b4c6-7d089bc60594"
@@ -7048,14 +7048,14 @@
         "B"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "39e39796-2090-4531-ba6b-820f37f961e0"
@@ -7063,7 +7063,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "0ee81c7e-bd7b-4c56-981b-2362b6468acf"
@@ -7081,7 +7081,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "1a60b877-adea-455c-b4c6-7d089bc60594"
@@ -7100,14 +7100,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "4430895a-05d2-486b-8942-f6a4f48837dd"
@@ -7115,7 +7115,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "322f8a37-f1fe-4e3d-ba7b-7386e83e437e"
@@ -7133,7 +7133,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "d9e24eb9-abf3-487a-8de9-0e77fe441a42"
@@ -7151,14 +7151,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "82060842-61c9-41ca-8ead-f7cea0cc9a45"
@@ -7166,7 +7166,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "c97e534c-f189-485f-9df8-740f9a3d0c7d"
@@ -7184,7 +7184,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "1a60b877-adea-455c-b4c6-7d089bc60594"
@@ -7201,14 +7201,14 @@
         "C"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "c97e534c-f189-485f-9df8-740f9a3d0c7d"
@@ -7216,7 +7216,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "e7ce9c18-eecf-4dee-bffb-661ee61ea970"
@@ -7234,7 +7234,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "b4fe4aa4-822c-4130-b1b3-66e2ca2b9605"
@@ -7251,14 +7251,14 @@
         "A"
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_branch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_branch",
         "type": "MatrixImpedanceBranch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "c97e534c-f189-485f-9df8-740f9a3d0c7d"
@@ -7266,7 +7266,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "a6373502-8523-4f33-acd7-81e99475c265"
@@ -7284,7 +7284,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_branch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_branch_equipment",
           "type": "MatrixImpedanceBranchEquipment",
           "serialized_type": "composed_component",
           "uuid": "9df9d013-5ef9-4f4d-b234-f936c98da771"
@@ -7308,14 +7308,14 @@
         true
       ],
       "__metadata__": {
-        "module": "gdm.distribution.components.matrix_impedance_switch",
+        "module": "gdm.systems.distribution.components.matrix_impedance_switch",
         "type": "MatrixImpedanceSwitch",
         "serialized_type": "base"
       },
       "buses": [
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "82060842-61c9-41ca-8ead-f7cea0cc9a45"
@@ -7323,7 +7323,7 @@
         },
         {
           "__metadata__": {
-            "module": "gdm.distribution.components.distribution_bus",
+            "module": "gdm.systems.distribution.components.distribution_bus",
             "type": "DistributionBus",
             "serialized_type": "composed_component",
             "uuid": "4430895a-05d2-486b-8942-f6a4f48837dd"
@@ -7341,7 +7341,7 @@
       },
       "equipment": {
         "__metadata__": {
-          "module": "gdm.distribution.equipment.matrix_impedance_switch_equipment",
+          "module": "gdm.systems.distribution.equipment.matrix_impedance_switch_equipment",
           "type": "MatrixImpedanceSwitchEquipment",
           "serialized_type": "composed_component",
           "uuid": "20966273-cfce-4657-a6a4-d7149e39cf21"

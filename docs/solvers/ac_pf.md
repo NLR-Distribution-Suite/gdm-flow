@@ -62,7 +62,7 @@ or independent agreement with an external feeder model.
 ### Low-level interface
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import solve_ac_power_flow
 
 system = DistributionSystem.from_json("model.json")
@@ -82,7 +82,7 @@ print(result.max_mismatch_pu)
 ### Component-based interface
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import solve_ac_power_flow_from_components
 
 system = DistributionSystem.from_json("model.json")

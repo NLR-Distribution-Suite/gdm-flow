@@ -18,7 +18,7 @@ gdm-flow ts-info examples/models/p5r.json
 Before running simulations, you can inspect what time series data is available:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import list_component_time_series, has_time_series_data
 
 system = DistributionSystem.from_json("model.json")

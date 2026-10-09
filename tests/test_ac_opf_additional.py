@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from gdm_flow import ac_opf as ac
 

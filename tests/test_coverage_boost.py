@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, patch
 import numpy as np
 import pytest
 
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 
 IEEE13_PATH = Path("tests/data/ieee-13/gdm/ieee13_system.json")
@@ -64,13 +64,13 @@ class TestTimeSeriesBatteryPathsMocked:
 
     def _make_system_with_battery(self):
         """Create a mock system with a fake battery component."""
-        from gdm.distribution.components import (
+        from gdm.systems.distribution.components import (
             DistributionBattery,
             DistributionCapacitor,
             DistributionLoad,
             DistributionSolar,
         )
-        from gdm.distribution.enums import Phase
+        from gdm.systems.distribution.enums import Phase
 
         mock_system = MagicMock()
 
@@ -100,8 +100,12 @@ class TestTimeSeriesBatteryPathsMocked:
 
         system = self._make_system_with_battery()
         p_spec, q_spec = build_nodal_power_specs_at_timestep(
-            system, 0, include_battery=True, include_loads=False,
-            include_solar=False, include_capacitor=False,
+            system,
+            0,
+            include_battery=True,
+            include_loads=False,
+            include_solar=False,
+            include_capacitor=False,
         )
         assert ("bus_bat", "A") in p_spec
         assert p_spec[("bus_bat", "A")] == 500.0
@@ -111,7 +115,9 @@ class TestTimeSeriesBatteryPathsMocked:
 
         system = self._make_system_with_battery()
         demand = build_dc_load_profile_at_timestep(
-            system, 0, include_loads=False,
+            system,
+            0,
+            include_loads=False,
             include_battery_as_negative_load=True,
         )
         assert ("bus_bat", "A") in demand
@@ -122,8 +128,12 @@ class TestTimeSeriesBatteryPathsMocked:
 
         system = self._make_system_with_battery()
         p_net, q_net = build_lindistflow_injections_at_timestep(
-            system, 0, include_battery=True, include_loads=False,
-            include_solar=False, include_capacitor=False,
+            system,
+            0,
+            include_battery=True,
+            include_loads=False,
+            include_solar=False,
+            include_capacitor=False,
         )
         assert ("bus_bat", "A") in p_net
         assert p_net[("bus_bat", "A")] < 0
@@ -168,10 +178,10 @@ class TestRegulatorTapStrategyMocked:
     """Test AdjustRegulatorTapStrategy.apply() with mocked regulators."""
 
     def test_apply_undervoltage_adjusts_tap_up(self):
-        from gdm.distribution.components.distribution_regulator import (
+        from gdm.systems.distribution.components.distribution_regulator import (
             DistributionRegulator,
         )
-        from gdm.distribution.enums import Phase
+        from gdm.systems.distribution.enums import Phase
 
         from gdm_flow.fix.detect import VoltageViolation, ViolationReport
         from gdm_flow.fix.strategies import AdjustRegulatorTapStrategy
@@ -204,9 +214,12 @@ class TestRegulatorTapStrategyMocked:
             solver="ldf",
             voltage_violations=[
                 VoltageViolation(
-                    bus_name="bus1", phase="A",
-                    voltage_v=113.0, nominal_v=120.0,
-                    min_v=114.0, max_v=126.0,
+                    bus_name="bus1",
+                    phase="A",
+                    voltage_v=113.0,
+                    nominal_v=120.0,
+                    min_v=114.0,
+                    max_v=126.0,
                     kind="undervoltage",
                 )
             ],
@@ -218,10 +231,10 @@ class TestRegulatorTapStrategyMocked:
         assert "reg1" in actions[0].component_name
 
     def test_apply_overvoltage_adjusts_tap_down(self):
-        from gdm.distribution.components.distribution_regulator import (
+        from gdm.systems.distribution.components.distribution_regulator import (
             DistributionRegulator,
         )
-        from gdm.distribution.enums import Phase
+        from gdm.systems.distribution.enums import Phase
 
         from gdm_flow.fix.detect import VoltageViolation, ViolationReport
         from gdm_flow.fix.strategies import AdjustRegulatorTapStrategy
@@ -254,9 +267,12 @@ class TestRegulatorTapStrategyMocked:
             solver="ldf",
             voltage_violations=[
                 VoltageViolation(
-                    bus_name="bus2", phase="B",
-                    voltage_v=128.0, nominal_v=120.0,
-                    min_v=114.0, max_v=126.0,
+                    bus_name="bus2",
+                    phase="B",
+                    voltage_v=128.0,
+                    nominal_v=120.0,
+                    min_v=114.0,
+                    max_v=126.0,
                     kind="overvoltage",
                 )
             ],
@@ -281,9 +297,12 @@ class TestAddCapacitorWithExisting:
             solver="ldf",
             voltage_violations=[
                 VoltageViolation(
-                    bus_name="675", phase="A",
-                    voltage_v=110.0, nominal_v=120.0,
-                    min_v=114.0, max_v=126.0,
+                    bus_name="675",
+                    phase="A",
+                    voltage_v=110.0,
+                    nominal_v=120.0,
+                    min_v=114.0,
+                    max_v=126.0,
                     kind="undervoltage",
                 )
             ],
@@ -304,9 +323,12 @@ class TestAddCapacitorWithExisting:
             solver="ldf",
             voltage_violations=[
                 VoltageViolation(
-                    bus_name="632", phase="A",
-                    voltage_v=110.0, nominal_v=120.0,
-                    min_v=114.0, max_v=126.0,
+                    bus_name="632",
+                    phase="A",
+                    voltage_v=110.0,
+                    nominal_v=120.0,
+                    min_v=114.0,
+                    max_v=126.0,
                     kind="undervoltage",
                 )
             ],
@@ -326,9 +348,12 @@ class TestAddCapacitorWithExisting:
             solver="ldf",
             voltage_violations=[
                 VoltageViolation(
-                    bus_name="632", phase="A",
-                    voltage_v=130.0, nominal_v=120.0,
-                    min_v=114.0, max_v=126.0,
+                    bus_name="632",
+                    phase="A",
+                    voltage_v=130.0,
+                    nominal_v=120.0,
+                    min_v=114.0,
+                    max_v=126.0,
                     kind="overvoltage",
                 )
             ],
@@ -389,6 +414,7 @@ class TestMultiperiodCommand:
         monkeypatch.setattr(cli, "_load_system", lambda _m: p5r)
 
         import typer
+
         with pytest.raises(typer.Exit):
             cli.multiperiod(
                 model=Path("ignored.json"),
@@ -464,8 +490,8 @@ class TestACOPFCapacitorAndBatteryPaths:
         assert cap_q > 0
 
     def test_build_specs_with_battery_mock(self):
-        from gdm.distribution.components import DistributionBattery
-        from gdm.distribution.enums import Phase
+        from gdm.systems.distribution.components import DistributionBattery
+        from gdm.systems.distribution.enums import Phase
 
         from gdm_flow.ac_opf import build_nodal_power_specs_from_components
 
@@ -492,8 +518,11 @@ class TestACOPFCapacitorAndBatteryPaths:
         mock_system.get_source_bus = MagicMock(return_value=MagicMock(name="src"))
 
         p_spec, q_spec = build_nodal_power_specs_from_components(
-            mock_system, include_battery=True, include_loads=False,
-            include_solar=False, include_capacitor=False,
+            mock_system,
+            include_battery=True,
+            include_loads=False,
+            include_solar=False,
+            include_capacitor=False,
         )
         assert ("bat_bus", "A") in p_spec
         assert p_spec[("bat_bus", "A")] == 1000.0
@@ -516,13 +545,15 @@ class TestSqliteExportPFBranches:
 
         db_path = str(tmp_path / "pf_branches.db")
         run_id = export_ac_pf_result_to_sqlite(
-            result, db_path,
+            result,
+            db_path,
             branch_loading_va=branch_loading,
             branch_loading_limits_va=branch_limits,
             branch_flow_w_var=branch_flow,
         )
 
         import sqlite3
+
         conn = sqlite3.connect(db_path)
         branches = conn.execute(
             "SELECT COUNT(*) FROM ac_pf_branches WHERE run_id = ?", (run_id,)
@@ -549,11 +580,13 @@ class TestSqliteExportPFBranches:
 
         db_path = str(tmp_path / "pf_vlimits.db")
         run_id = export_ac_pf_result_to_sqlite(
-            result, db_path,
+            result,
+            db_path,
             voltage_limits_v=voltage_limits,
         )
 
         import sqlite3
+
         conn = sqlite3.connect(db_path)
         violations = conn.execute(
             "SELECT COUNT(*) FROM voltage_violations WHERE run_id = ?", (run_id,)
@@ -584,8 +617,8 @@ class TestResizeTransformerWithRealModel:
         if not model_path.exists():
             pytest.skip("p1rhs7 model not found")
 
-        from gdm.distribution import DistributionSystem
-        from gdm.distribution.components import DistributionTransformer
+        from gdm.systems.distribution import DistributionSystem
+        from gdm.systems.distribution.components import DistributionTransformer
 
         from gdm_flow.fix.detect import BranchLoadingViolation, ViolationReport
         from gdm_flow.fix.strategies import ResizeTransformerStrategy

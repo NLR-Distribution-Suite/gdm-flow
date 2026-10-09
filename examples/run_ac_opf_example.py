@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import optimize_ac_power_flow_from_components
 
 

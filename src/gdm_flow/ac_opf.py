@@ -8,8 +8,8 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 import numpy as np
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBattery,
     DistributionBus,
     DistributionCapacitor,
@@ -18,7 +18,7 @@ from gdm.distribution.components import (
     DistributionSolar,
     DistributionTransformer,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from ._utils import _phase_name, _phase_voltage
 from .ybus import YBusResult, calculate_ybus
@@ -532,7 +532,7 @@ def _initialize_angles(
             _s_bus_pri_angle[bus_sec.name] = pri_angle
 
     if _s_bus_pri_angle:
-        from gdm.distribution.components import DistributionBranchBase
+        from gdm.systems.distribution.components import DistributionBranchBase
 
         _sec_adj: dict[str, list[str]] = {}
         for branch in system.get_components(DistributionBranchBase):

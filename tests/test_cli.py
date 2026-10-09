@@ -9,9 +9,9 @@ import typer
 import numpy as np
 
 import gdm_flow.cli as cli
-from gdm.distribution import DistributionSystem
-from gdm.distribution.enums import Phase
-from gdm.distribution.components.base.distribution_branch_base import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.enums import Phase
+from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
 from gdm_flow import calculate_ybus
@@ -1326,7 +1326,7 @@ def test_build_ac_and_dc_branch_loading_helpers_mocked(monkeypatch):
     _OrigBase = DistributionBranchBase
     _fake_base = type("DistributionBranchBase", (_Branch, _OrigBase), {})
     monkeypatch.setattr(
-        "gdm.distribution.components.base.distribution_branch_base.DistributionBranchBase",
+        "gdm.systems.distribution.components.base.distribution_branch_base.DistributionBranchBase",
         _Branch,
     )
 

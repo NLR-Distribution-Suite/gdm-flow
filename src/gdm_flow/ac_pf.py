@@ -14,9 +14,12 @@ import math
 
 import numpy as np
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import DistributionLoad, DistributionTransformer
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
+    DistributionLoad,
+    DistributionTransformer,
+)
+from gdm.systems.distribution.enums import Phase
 
 from ._utils import _phase_name
 from .ac_opf import (
@@ -229,7 +232,7 @@ def solve_ac_power_flow(
     # Propagate through secondary lines: any bus reachable from a transformer
     # secondary via S1/S2 lines inherits the same primary angle.
     if _s_bus_pri_angle:
-        from gdm.distribution.components import DistributionBranchBase
+        from gdm.systems.distribution.components import DistributionBranchBase
 
         _sec_adj: dict[str, list[str]] = {}
         for branch in system.get_components(DistributionBranchBase):

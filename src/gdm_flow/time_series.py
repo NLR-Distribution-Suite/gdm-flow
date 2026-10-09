@@ -9,8 +9,8 @@ from typing import Any, Sequence, Tuple
 
 import numpy as np
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBattery,
     DistributionCapacitor,
     DistributionLoad,
@@ -926,7 +926,7 @@ def _create_ts_schema(conn: Any) -> None:
 
 def _populate_bus_nominal(conn: Any, system: Any) -> dict[tuple[str, str], float]:
     """Populate ts_bus_nominal table and return nominal voltage map."""
-    from gdm.distribution.components import DistributionBus
+    from gdm.systems.distribution.components import DistributionBus
 
     nominal: dict[tuple[str, str], float] = {}
     for bus in system.get_components(DistributionBus):

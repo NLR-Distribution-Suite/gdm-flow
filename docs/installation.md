@@ -3,29 +3,25 @@
 ## Requirements
 
 - Python ≥ 3.11
-- [grid-data-models](https://github.com/NLR-Distribution-Suite/grid-data-models)
+- [grid-data-models](https://github.com/NLR-Distribution-Suite/grid-data-models) >= 2.4.0
 
 ## Install from Source
 
 Clone the repository and install in editable mode:
 
 ```bash
-git clone https://github.com/NLR-Distribution-Suite/gdm_flow.git
-cd gdm_flow
+git clone https://github.com/NLR-Distribution-Suite/gdm-flow.git
+cd gdm-flow
 pip install -e .
 ```
 
 ## Optional Extras
 
-GDM-Flow has optional dependency groups for different use cases:
+SciPy, optimization solvers and sparse matrix support are core dependencies.
+Optional dependency groups cover plotting, MCP, independent OpenDSS checks,
+and development:
 
 ```bash
-# For AC OPF and DC OPF solvers (requires SciPy)
-pip install -e ".[optimization]"
-
-# For sparse Y-bus matrices
-pip install -e ".[sparse]"
-
 # For interactive Plotly dashboards
 pip install -e ".[plotting]"
 
@@ -33,10 +29,13 @@ pip install -e ".[plotting]"
 pip install -e ".[dev]"
 
 # For MCP server runtime and MCP tests
-pip install -e ".[mcp,optimization]"
+pip install -e ".[mcp]"
+
+# For independent OpenDSS comparisons
+pip install -e ".[opendss]"
 
 # Install everything
-pip install -e ".[optimization,sparse,plotting,dev,mcp]"
+pip install -e ".[plotting,dev,mcp,opendss]"
 ```
 
 ## Dependencies
@@ -47,7 +46,7 @@ pip install -e ".[optimization,sparse,plotting,dev,mcp]"
 | `grid-data-models` | Distribution system data model | Yes |
 | `typer` | CLI framework | Yes |
 | `rich` | Terminal formatting | Yes |
-| `scipy` | AC/DC optimization solvers, AC PF | Optional |
+| `scipy` | AC/DC optimization solvers, AC PF | Yes |
 | `plotly` | Interactive HTML dashboards | Optional |
 | `mcp` | MCP server runtime and MCP tests | Optional |
 
@@ -64,7 +63,7 @@ pytest -v --tb=short
 Run MCP server tests directly:
 
 ```bash
-pip install -e ".[mcp,optimization,dev]"
+pip install -e ".[mcp,dev]"
 pytest -v --tb=short tests/test_mcp_server.py
 ```
 

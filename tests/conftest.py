@@ -1,6 +1,6 @@
 import pytest
 
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 
 @pytest.fixture(scope="session")

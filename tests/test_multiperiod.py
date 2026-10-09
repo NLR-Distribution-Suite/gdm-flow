@@ -23,7 +23,7 @@ def system():
     """Load the p5r model which has time series data."""
     if not MODEL_PATH.exists():
         pytest.skip("p5r.json model not found")
-    from gdm.distribution import DistributionSystem
+    from gdm.systems.distribution import DistributionSystem
 
     return DistributionSystem.from_json(str(MODEL_PATH))
 
@@ -79,7 +79,7 @@ class TestMultiperiodDCOPF:
         generators = build_dc_generators_from_components(system)
 
         # Create a synthetic battery on an existing bus
-        from gdm.distribution.components import DistributionBus
+        from gdm.systems.distribution.components import DistributionBus
 
         buses = list(system.get_components(DistributionBus))
         bus = buses[1]  # Pick a non-source bus
@@ -204,7 +204,7 @@ class TestMultiperiodLinDistFlow:
         assert v0 != v1
 
     def test_solve_with_synthetic_battery(self, system):
-        from gdm.distribution.components import DistributionBus
+        from gdm.systems.distribution.components import DistributionBus
 
         buses = list(system.get_components(DistributionBus))
         bus = buses[1]

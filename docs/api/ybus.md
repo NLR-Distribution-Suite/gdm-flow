@@ -17,13 +17,12 @@ def calculate_ybus(
     system: DistributionSystem,
     *,
     include_neutral: bool = False,
-    include_shunt: bool = True,
-    include_transformers: bool = True,
-    include_regulators: bool = True,
-    sparse: bool = False,
+    include_shunt: bool = False,
     frequency_hz: float = 60.0,
-    vbase_override: dict[str, float] | None = None,
-    debug: bool = False,
+    include_transformers: bool = True,
+    include_open_switches: bool = False,
+    convert_geometry_to_matrix: bool = True,
+    sparse: bool = False,
 ) -> YBusResult:
 ```
 
@@ -35,20 +34,25 @@ Build the bus admittance matrix from all branches and transformers in the system
 |-----------|---------|-------------|
 | `system` | — | A `DistributionSystem` instance |
 | `include_neutral` | `False` | Include neutral (N) phase nodes |
-| `include_shunt` | `True` | Include line charging admittance (pi model) |
-| `include_transformers` | `True` | Include transformer admittance stamps |
-| `include_regulators` | `True` | Include regulator turns ratio and impedance |
+| `include_shunt` | `False` | Include line charging admittance (pi model) |
+| `include_transformers` | `True` | Include transformer and regulator admittance stamps |
+| `include_open_switches` | `False` | Include open switch phases as connected |
+| `convert_geometry_to_matrix` | `True` | Convert geometry branches on a system copy |
 | `sparse` | `False` | Return `scipy.sparse.csr_matrix` instead of dense `np.ndarray` |
 | `frequency_hz` | `60.0` | System frequency for computing shunt susceptance |
-| `vbase_override` | `None` | Override nominal voltage bases per bus |
-| `debug` | `False` | Print diagnostic information during construction |
 
 **Returns:** `YBusResult`
+
+Active branches without equipment raise `ValueError`; unsupported active branch
+equipment raises `NotImplementedError` rather than being silently omitted.
+Station transformer layouts and vector groups outside the supported scope also
+raise `NotImplementedError`. See [Y-Bus Construction](../solvers/ybus.md) for
+reactor, station switch, transformer connection, and grounding semantics.
 
 **Example:**
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import calculate_ybus
 
 system = DistributionSystem.from_json("model.json")

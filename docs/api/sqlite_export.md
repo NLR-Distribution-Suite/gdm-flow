@@ -74,7 +74,7 @@ from gdm_flow import (
     export_all_results_to_sqlite,
     export_ac_opf_result_to_sqlite,
 )
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 system = DistributionSystem.from_json("model.json")
 

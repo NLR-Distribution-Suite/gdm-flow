@@ -23,9 +23,9 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import DistributionBus
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import DistributionBus
+from gdm.systems.distribution.enums import Phase
 
 from ._utils import _phase_name
 from .ac_opf import build_regulator_voltage_limits_from_components
@@ -62,10 +62,12 @@ def _load_system(model: Path) -> DistributionSystem:
 
     # Auto-aggregate parallel single-phase transformers/regulators
     from collections import defaultdict
-    from gdm.distribution.components.distribution_transformer import (
+    from gdm.systems.distribution.components.distribution_transformer import (
         DistributionTransformer,
     )
-    from gdm.distribution.components.distribution_regulator import DistributionRegulator
+    from gdm.systems.distribution.components.distribution_regulator import (
+        DistributionRegulator,
+    )
 
     needs_aggregation = False
     for comp_type, label in [
@@ -89,7 +91,7 @@ def _load_system(model: Path) -> DistributionSystem:
                 )
 
     if needs_aggregation:
-        from gdm.distribution.utils import aggregate_single_phase_transformers
+        from gdm.systems.distribution.utils import aggregate_single_phase_transformers
 
         aggregate_single_phase_transformers(system)
 
@@ -215,7 +217,7 @@ def _build_node_voltage_limits_v(
 def _build_lindistflow_loading_limits_va(
     system: DistributionSystem,
 ) -> dict[tuple[str, str], float]:
-    from gdm.distribution.components.base.distribution_branch_base import (
+    from gdm.systems.distribution.components.base.distribution_branch_base import (
         DistributionBranchBase,
     )
 
@@ -290,7 +292,7 @@ def _build_ac_branch_loading_from_result(
     dict[tuple[str, str], float],
     dict[tuple[str, str], tuple[float, float]],
 ]:
-    from gdm.distribution.components.base.distribution_branch_base import (
+    from gdm.systems.distribution.components.base.distribution_branch_base import (
         DistributionBranchBase,
     )
 
@@ -362,7 +364,7 @@ def _build_dc_branch_loading_from_result(
     Reactive flow is reported as 0.0 in this DC approximation.
     """
 
-    from gdm.distribution.components.base.distribution_branch_base import (
+    from gdm.systems.distribution.components.base.distribution_branch_base import (
         DistributionBranchBase,
     )
 
@@ -830,7 +832,7 @@ def info(
     src_phases = [_phase_name(p) for p in src_bus.phases if p != Phase.N]
 
     # Count components
-    from gdm.distribution.components import (
+    from gdm.systems.distribution.components import (
         DistributionBus,
         DistributionLoad,
         DistributionSolar,
@@ -1092,7 +1094,7 @@ def compare(
     console.print(tbl)
 
     # Per-phase loading table
-    from gdm.distribution.components.distribution_load import DistributionLoad
+    from gdm.systems.distribution.components.distribution_load import DistributionLoad
 
     phase_load_p: dict[str, float] = {}
     phase_load_q: dict[str, float] = {}

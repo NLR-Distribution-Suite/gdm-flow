@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 from gdm_flow.fix import (
     ViolationReport,

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
-from gdm.distribution.enums import Phase, VoltageTypes
+from gdm.systems.distribution.enums import Phase, VoltageTypes
 
 from gdm_flow import ybus as ybus_mod
 
@@ -135,7 +136,7 @@ class _TransformerMarker:
 
 def test_build_bus_index_and_active_phase_neutral_filters():
     def _get_components(typ):
-        from gdm.distribution.components import DistributionTransformer
+        from gdm.systems.distribution.components import DistributionTransformer
 
         if typ is DistributionTransformer:
             return []
@@ -232,9 +233,29 @@ def test_calculate_ybus_convert_and_skip_paths(monkeypatch):
     monkeypatch.setattr(ybus_mod, "GeometryBranch", _GeoMarker)
 
     sys = _FakeSystem()
+    sys._branches = [
+        branch for branch in sys._branches if branch.name not in {"noeq", "unsupported"}
+    ]
     result = ybus_mod.calculate_ybus(
         sys, convert_geometry_to_matrix=True, include_transformers=True
     )
 
     assert sys.convert_called is True
     assert result.ybus.shape[0] == 2
+
+
+@pytest.mark.parametrize(
+    "name, error, message",
+    [
+        ("noeq", ValueError, "has no equipment"),
+        ("unsupported", NotImplementedError, "Unsupported equipment"),
+    ],
+)
+def test_active_unsupported_branches_raise(monkeypatch, name, error, message):
+    monkeypatch.setattr(ybus_mod, "DistributionBus", _Bus)
+    monkeypatch.setattr(ybus_mod, "DistributionBranchBase", _BranchBase)
+    monkeypatch.setattr(ybus_mod, "DistributionTransformer", _TransformerMarker)
+    sys = _FakeSystem()
+    sys._branches = [branch for branch in sys._branches if branch.name == name]
+    with pytest.raises(error, match=message):
+        ybus_mod.calculate_ybus(sys, convert_geometry_to_matrix=False)

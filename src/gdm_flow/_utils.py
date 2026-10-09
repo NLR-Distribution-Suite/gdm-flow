@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 
-from gdm.distribution.enums import Phase, VoltageTypes
+from gdm.systems.distribution.enums import Phase, VoltageTypes
 
 
 def _phase_name(phase: Phase | str) -> str:

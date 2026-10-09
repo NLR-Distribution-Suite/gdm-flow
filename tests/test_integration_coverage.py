@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 
 MODEL_PATH = Path("examples/models/p5r.json")
@@ -35,9 +35,7 @@ class TestSQLiteExportIntegration:
         assert run_id is not None
 
         conn = sqlite3.connect(db_path)
-        row = conn.execute(
-            "SELECT * FROM runs WHERE run_id = ?", (run_id,)
-        ).fetchone()
+        row = conn.execute("SELECT * FROM runs WHERE run_id = ?", (run_id,)).fetchone()
         assert row is not None
         nodes = conn.execute(
             "SELECT COUNT(*) FROM ac_pf_nodes WHERE run_id = ?", (run_id,)
@@ -114,7 +112,9 @@ class TestFixStrategiesIntegration:
         from gdm_flow.fix.strategies import AdjustRegulatorTapStrategy
 
         # Use tight limits to force violations
-        report = detect_violations(system, solver="ldf", vm_min_pu=0.999, vm_max_pu=1.001)
+        report = detect_violations(
+            system, solver="ldf", vm_min_pu=0.999, vm_max_pu=1.001
+        )
         if not report.voltage_violations:
             pytest.skip("No voltage violations with tight limits on this system")
 
@@ -127,7 +127,9 @@ class TestFixStrategiesIntegration:
         from gdm_flow.fix.detect import detect_violations
         from gdm_flow.fix.strategies import AddCapacitorStrategy
 
-        report = detect_violations(system, solver="ldf", vm_min_pu=0.999, vm_max_pu=1.001)
+        report = detect_violations(
+            system, solver="ldf", vm_min_pu=0.999, vm_max_pu=1.001
+        )
         if not any(v.kind == "undervoltage" for v in report.voltage_violations):
             pytest.skip("No undervoltage violations on this system")
 
@@ -141,7 +143,9 @@ class TestFixStrategiesIntegration:
         from gdm_flow.fix.strategies import ResizeConductorStrategy
 
         # Very tight limits to force violations
-        report = detect_violations(system, solver="ldf", vm_min_pu=0.999, vm_max_pu=1.001)
+        report = detect_violations(
+            system, solver="ldf", vm_min_pu=0.999, vm_max_pu=1.001
+        )
         if not report.loading_violations and not any(
             v.kind == "undervoltage" for v in report.voltage_violations
         ):

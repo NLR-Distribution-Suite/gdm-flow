@@ -9,17 +9,17 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBus,
     DistributionCapacitor,
     DistributionRegulator,
     DistributionTransformer,
 )
-from gdm.distribution.components.base.distribution_branch_base import (
+from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from ._utils import _phase_name, _phase_voltage
 

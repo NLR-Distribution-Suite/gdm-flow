@@ -5,24 +5,28 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 import math
+import re
 
 import numpy as np
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBus,
+    DistributionReactor,
     DistributionTransformer,
     GeometryBranch,
     SequenceImpedanceBranch,
 )
-from gdm.distribution.components.distribution_regulator import DistributionRegulator
-from gdm.distribution.components.base.distribution_branch_base import (
+from gdm.systems.distribution.components.distribution_regulator import (
+    DistributionRegulator,
+)
+from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
-from gdm.distribution.components.base.distribution_switch_base import (
+from gdm.systems.distribution.components.base.distribution_switch_base import (
     DistributionSwitchBase,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from ._utils import _phase_name, _phase_voltage
 
@@ -125,6 +129,28 @@ def _matrix_branch_series_admittance(
         return np.linalg.inv(z)
     except np.linalg.LinAlgError:
         return np.linalg.pinv(z)
+
+
+def _reactor_impedance_ohm(reactor: DistributionReactor) -> complex:
+    resistance = float(reactor.equipment.resistance.to("ohm").magnitude)
+    reactance = float(reactor.equipment.reactance.to("ohm").magnitude)
+    if (
+        not np.isfinite(resistance)
+        or not np.isfinite(reactance)
+        or resistance < 0
+        or reactance < 0
+        or resistance == reactance == 0
+    ):
+        raise ValueError(
+            f"Reactor {reactor.name!r} requires finite, nonnegative, nonzero impedance."
+        )
+    return resistance + 1j * reactance
+
+
+def _reactor_series_admittance(
+    reactor: DistributionReactor, active_idx: list[int]
+) -> np.ndarray:
+    return np.eye(len(active_idx), dtype=complex) / _reactor_impedance_ohm(reactor)
 
 
 def _matrix_branch_shunt_admittance(
@@ -332,12 +358,146 @@ def _stamp_grounded_center_tap(
     ybus[np.ix_(indices, indices)] += primitive
 
 
+def _stamp_power_transformer(
+    ybus: np.ndarray,
+    label_to_index: dict[BusPhaseLabel, int],
+    transformer: DistributionTransformer,
+    include_neutral: bool,
+) -> None:
+    equipment = transformer.equipment
+    windings = equipment.windings
+    if include_neutral or len(windings) != 2 or len(transformer.buses) != 2:
+        raise NotImplementedError(
+            "Station transformers require two windings and implicit neutrals."
+        )
+    phases = [Phase.A, Phase.B, Phase.C]
+    groups = [
+        [_phase_name(phase) for phase in group] for group in transformer.winding_phases
+    ]
+    if any(winding.num_phases != 3 for winding in windings) or any(
+        set(group) - {"N"} != {"A", "B", "C"} for group in groups
+    ):
+        raise NotImplementedError(
+            "Station transformers require three ABC phases on each winding."
+        )
+    connections = [
+        getattr(winding.connection_type, "value", winding.connection_type)
+        for winding in windings
+    ]
+    if any(connection not in {"STAR", "DELTA"} for connection in connections):
+        raise NotImplementedError(
+            "Station transformer winding connections must be STAR or DELTA."
+        )
+    rotation = np.eye(3)
+    if equipment.vector_group is not None:
+        match = re.fullmatch(
+            r"([DYdy])[Nn]?([DYdy])[Nn]?([0-9]|1[01])", equipment.vector_group
+        )
+        if match is None:
+            raise NotImplementedError(
+                f"Unsupported vector group {equipment.vector_group!r}."
+            )
+        symbols = ["D" if connection == "DELTA" else "Y" for connection in connections]
+        if [match[1].upper(), match[2].upper()] != symbols:
+            raise ValueError("Vector group disagrees with winding connections.")
+        clock_step = (int(match[3]) + (symbols[0] == "D") - (symbols[1] == "D")) % 12
+        if clock_step % 2:
+            raise NotImplementedError(
+                f"Unsupported clock orientation in {equipment.vector_group!r}."
+            )
+        rotation = np.linalg.matrix_power(
+            -np.roll(np.eye(3), 1, axis=1), clock_step // 2
+        )
+    voltage = np.array(
+        [
+            _phase_voltage(winding.rated_voltage, winding.voltage_type)
+            for winding in windings
+        ]
+    )
+    power = np.array(
+        [float(winding.rated_power.to("va").magnitude) / 3 for winding in windings]
+    )
+    resistance = np.array([float(winding.resistance) for winding in windings]) / 100
+    reactance = float(equipment.winding_reactances[0]) / 100
+    core_loss = float(equipment.pct_no_load_loss) / 100
+    taps = (
+        np.ones((2, 3))
+        if transformer.tap_positions is None
+        else np.array(
+            [
+                [
+                    transformer.tap_positions[index][groups[index].index(phase.value)]
+                    for phase in phases
+                ]
+                for index in range(2)
+            ]
+        )
+    )
+    values = np.concatenate(
+        [voltage, power, resistance, [reactance, core_loss], taps.ravel()]
+    )
+    if (
+        not np.all(np.isfinite(values))
+        or np.any(voltage <= 0)
+        or np.any(power <= 0)
+        or np.any(resistance < 0)
+        or reactance < 0
+        or core_loss < 0
+        or np.any(taps <= 0)
+    ):
+        raise ValueError(
+            f"Invalid station transformer ratings, losses, or taps on {transformer.name!r}."
+        )
+    impedance = voltage[0] ** 2 * (
+        resistance[0] / power[0] + resistance[1] / power[1] + 1j * reactance / power[0]
+    )
+    if abs(impedance) == 0:
+        raise ValueError("Station transformer leakage impedance must be nonzero.")
+    delta = (np.eye(3) - np.roll(np.eye(3), 1, axis=1)) / np.sqrt(3)
+    maps = [
+        np.diag(1 / taps[index]) @ (delta if connection == "DELTA" else np.eye(3))
+        for index, connection in enumerate(connections)
+    ]
+    ratio = voltage[0] / voltage[1]
+    terminal_map = np.column_stack([maps[0], -ratio * rotation @ maps[1]])
+    neutrals = []
+    for index, winding in enumerate(windings):
+        if connections[index] == "STAR" and not winding.is_grounded:
+            neutral = 1 / taps[index]
+            neutrals.append(-neutral if index == 0 else ratio * rotation @ neutral)
+    if neutrals:
+        terminal_map = np.column_stack([terminal_map, *neutrals])
+    primitive = terminal_map.T @ terminal_map / impedance
+    if core_loss:
+        core_map = np.zeros((3, primitive.shape[0]))
+        core_map[:, 3:6] = maps[1]
+        if connections[1] == "STAR" and not windings[1].is_grounded:
+            core_map[:, -1] = -1 / taps[1]
+        primitive += core_loss * power[0] / voltage[1] ** 2 * core_map.T @ core_map
+    if neutrals:
+        primitive = (
+            primitive[:6, :6]
+            - primitive[:6, 6:] @ np.linalg.pinv(primitive[6:, 6:]) @ primitive[6:, :6]
+        )
+    indices = [
+        label_to_index[(bus.name, phase.value)]
+        for bus in transformer.buses
+        for phase in phases
+    ]
+    ybus[np.ix_(indices, indices)] += primitive
+
+
 def _stamp_transformer(
     ybus: np.ndarray,
     label_to_index: dict[BusPhaseLabel, int],
     transformer: DistributionTransformer,
     include_neutral: bool,
 ) -> None:
+    from gdm.systems.distribution.equipment import PowerTransformerEquipment
+
+    if isinstance(transformer.equipment, PowerTransformerEquipment):
+        _stamp_power_transformer(ybus, label_to_index, transformer, include_neutral)
+        return
     if len(transformer.buses) < 2 or len(transformer.equipment.windings) < 2:
         return
 
@@ -456,6 +616,9 @@ def calculate_ybus(
         Matrix and node indexing metadata.
     """
 
+    for reactor in system.get_components(DistributionReactor):
+        if reactor.in_service:
+            _reactor_impedance_ohm(reactor)
     working_system = system.deepcopy() if convert_geometry_to_matrix else system
     if convert_geometry_to_matrix and list(
         working_system.get_components(GeometryBranch)
@@ -472,7 +635,7 @@ def calculate_ybus(
         if not branch.in_service:
             continue
         if not hasattr(branch, "equipment"):
-            continue
+            raise ValueError(f"Active branch {branch.name!r} has no equipment.")
 
         active_idx = _active_branch_phase_indices(
             branch, include_neutral, include_open_switches
@@ -486,7 +649,10 @@ def calculate_ybus(
         if any((branch.buses[1].name, p) not in label_to_index for p in phase_names):
             continue
 
-        if isinstance(branch, SequenceImpedanceBranch):
+        if isinstance(branch, DistributionReactor):
+            y_series = _reactor_series_admittance(branch, active_idx)
+            y_shunt = None
+        elif isinstance(branch, SequenceImpedanceBranch):
             y_series = _sequence_branch_series_admittance(branch, active_idx)
             y_shunt = None
         elif hasattr(branch.equipment, "r_matrix") and hasattr(
@@ -499,7 +665,10 @@ def calculate_ybus(
                 else None
             )
         else:
-            continue
+            raise NotImplementedError(
+                f"Unsupported equipment {type(branch.equipment).__name__} "
+                f"on active branch {branch.name!r}."
+            )
 
         _stamp_branch(
             ybus,
