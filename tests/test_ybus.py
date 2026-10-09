@@ -294,6 +294,75 @@ def test_loaded_station_transformer_power_flow_matches_opendss():
     np.testing.assert_allclose(actual, expected, rtol=1e-7, atol=1e-5)
 
 
+@pytest.mark.parametrize(
+    "invalid,message",
+    [
+        ("loss", "Invalid station transformer"),
+        ("tap", "Invalid station transformer"),
+        ("impedance", "leakage impedance must be nonzero"),
+        ("vector", "disagrees with winding connections"),
+    ],
+)
+def test_station_transformer_rejects_invalid_electrical_data(invalid, message):
+    from gdm.systems.distribution.components import DistributionTransformer
+
+    transformer = DistributionTransformer.example().model_copy(
+        deep=True, update={"equipment": PowerTransformerEquipment.example()}
+    )
+    if invalid == "loss":
+        transformer.equipment = transformer.equipment.model_copy(
+            update={"pct_no_load_loss": -1.0}
+        )
+    elif invalid == "tap":
+        transformer = transformer.model_copy(
+            update={"tap_positions": [[0.0] * 3, [1.0] * 3]}
+        )
+    elif invalid == "impedance":
+        windings = [
+            winding.model_copy(update={"resistance": 0.0})
+            for winding in transformer.equipment.windings
+        ]
+        transformer.equipment = transformer.equipment.model_copy(
+            update={"windings": windings, "winding_reactances": [0.0]}
+        )
+    else:
+        transformer.equipment = transformer.equipment.model_copy(
+            update={"vector_group": "YNyn0"}
+        )
+    with pytest.raises(ValueError, match=message):
+        ybus_mod._stamp_power_transformer(
+            np.zeros((6, 6), dtype=complex), {}, transformer, False
+        )
+
+
+def test_split_phase_neutral_index_is_added_once():
+    from types import SimpleNamespace
+
+    primary = SimpleNamespace(name="primary", phases=[Phase.A])
+    secondary = SimpleNamespace(name="secondary", phases=[Phase.S1, Phase.S2])
+    transformer = SimpleNamespace(
+        in_service=True,
+        equipment=SimpleNamespace(windings=[object(), object(), object()]),
+        buses=[primary, secondary, secondary],
+        winding_phases=[[Phase.A], [Phase.S1, Phase.N], [Phase.N, Phase.S2]],
+    )
+    system = SimpleNamespace(
+        get_components=lambda kind: [primary, secondary]
+        if kind is ybus_mod.DistributionBus
+        else [transformer]
+    )
+    labels, indices = ybus_mod._build_bus_phase_index(system, include_neutral=True)
+    assert labels == [
+        ("primary", "A"),
+        ("secondary", "S1"),
+        ("secondary", "S2"),
+        ("secondary", "N"),
+    ]
+    assert len(labels) == len(indices) == 4
+    labels, _ = ybus_mod._build_bus_phase_index(system, include_neutral=False)
+    assert ("secondary", "N") not in labels
+
+
 @pytest.mark.parametrize("vector_group", ["Dyn0", "Dyn2"])
 def test_station_transformer_rejects_incompatible_clock(vector_group):
     from gdm.systems.distribution.components import DistributionTransformer
