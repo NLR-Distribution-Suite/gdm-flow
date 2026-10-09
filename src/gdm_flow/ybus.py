@@ -220,12 +220,10 @@ def _stamp_branch(
 SPLIT_PHASE_CONTRACT = "grounded-center-tap-v1"
 
 
-def _stamp_grounded_center_tap(
-    ybus: np.ndarray,
-    label_to_index: dict[BusPhaseLabel, int],
+def _center_tap_phases(
     transformer: DistributionTransformer,
     include_neutral: bool,
-) -> None:
+) -> list[list[str]]:
     windings = transformer.equipment.windings
     phases = [
         [_phase_name(phase) for phase in group] for group in transformer.winding_phases
@@ -249,6 +247,11 @@ def _stamp_grounded_center_tap(
         raise ValueError(
             "Split-phase secondary windings require explicit grounded metadata."
         )
+    return phases
+
+
+def _center_tap_winding_data(transformer: DistributionTransformer):
+    windings = transformer.equipment.windings
     no_load_loss = float(getattr(transformer.equipment, "pct_no_load_loss", 0))
     if not np.isfinite(no_load_loss) or no_load_loss < 0:
         raise ValueError("Split-phase no-load loss must be finite and nonnegative.")
@@ -276,6 +279,10 @@ def _stamp_grounded_center_tap(
         or np.any(resistance < 0)
     ):
         raise ValueError("Invalid split-phase winding ratings or resistance.")
+    return voltages, powers, resistance, no_load_loss
+
+
+def _center_tap_impedance(transformer, voltages, powers, resistance):
     reactances = {}
     for pair, value in zip(
         transformer.equipment.coupling_sequences,
@@ -319,6 +326,10 @@ def _stamp_grounded_center_tap(
         raise ValueError(
             "Split-phase leakage impedance must be passive and nonsingular."
         )
+    return impedance
+
+
+def _center_tap_taps(transformer: DistributionTransformer, phases):
     taps = transformer.tap_positions
     tap_values = []
     for index, group in enumerate(phases):
@@ -341,6 +352,19 @@ def _stamp_grounded_center_tap(
     tap_values = np.asarray(tap_values)
     if not np.all(np.isfinite(tap_values)) or np.any(tap_values <= 0):
         raise ValueError("Split-phase taps must be finite and positive.")
+    return tap_values
+
+
+def _stamp_grounded_center_tap(
+    ybus: np.ndarray,
+    label_to_index: dict[BusPhaseLabel, int],
+    transformer: DistributionTransformer,
+    include_neutral: bool,
+) -> None:
+    phases = _center_tap_phases(transformer, include_neutral)
+    voltages, powers, resistance, no_load_loss = _center_tap_winding_data(transformer)
+    impedance = _center_tap_impedance(transformer, voltages, powers, resistance)
+    tap_values = _center_tap_taps(transformer, phases)
     polarity = np.array(
         [1.0, *[1.0 if "S1" in group else -1.0 for group in phases[1:]]]
     )
@@ -358,12 +382,10 @@ def _stamp_grounded_center_tap(
     ybus[np.ix_(indices, indices)] += primitive
 
 
-def _stamp_power_transformer(
-    ybus: np.ndarray,
-    label_to_index: dict[BusPhaseLabel, int],
+def _power_transformer_layout(
     transformer: DistributionTransformer,
     include_neutral: bool,
-) -> None:
+):
     equipment = transformer.equipment
     windings = equipment.windings
     if include_neutral or len(windings) != 2 or len(transformer.buses) != 2:
@@ -388,26 +410,33 @@ def _stamp_power_transformer(
         raise NotImplementedError(
             "Station transformer winding connections must be STAR or DELTA."
         )
+    return phases, groups, connections
+
+
+def _power_transformer_rotation(vector_group: str | None, connections):
     rotation = np.eye(3)
-    if equipment.vector_group is not None:
-        match = re.fullmatch(
-            r"([DYdy])[Nn]?([DYdy])[Nn]?([0-9]|1[01])", equipment.vector_group
-        )
+    if vector_group is not None:
+        match = re.fullmatch(r"([DYdy])[Nn]?([DYdy])[Nn]?([0-9]|1[01])", vector_group)
         if match is None:
-            raise NotImplementedError(
-                f"Unsupported vector group {equipment.vector_group!r}."
-            )
+            raise NotImplementedError(f"Unsupported vector group {vector_group!r}.")
         symbols = ["D" if connection == "DELTA" else "Y" for connection in connections]
         if [match[1].upper(), match[2].upper()] != symbols:
             raise ValueError("Vector group disagrees with winding connections.")
         clock_step = (int(match[3]) + (symbols[0] == "D") - (symbols[1] == "D")) % 12
         if clock_step % 2:
             raise NotImplementedError(
-                f"Unsupported clock orientation in {equipment.vector_group!r}."
+                f"Unsupported clock orientation in {vector_group!r}."
             )
         rotation = np.linalg.matrix_power(
             -np.roll(np.eye(3), 1, axis=1), clock_step // 2
         )
+    return rotation
+
+
+def _power_transformer_data(transformer: DistributionTransformer, groups):
+    equipment = transformer.equipment
+    windings = equipment.windings
+    phases = [Phase.A, Phase.B, Phase.C]
     voltage = np.array(
         [
             _phase_voltage(winding.rated_voltage, winding.voltage_type)
@@ -453,6 +482,12 @@ def _stamp_power_transformer(
     )
     if abs(impedance) == 0:
         raise ValueError("Station transformer leakage impedance must be nonzero.")
+    return voltage, power, taps, impedance, core_loss
+
+
+def _power_transformer_primitive(transformer, connections, rotation, electrical_data):
+    voltage, power, taps, impedance, core_loss = electrical_data
+    windings = transformer.equipment.windings
     delta = (np.eye(3) - np.roll(np.eye(3), 1, axis=1)) / np.sqrt(3)
     maps = [
         np.diag(1 / taps[index]) @ (delta if connection == "DELTA" else np.eye(3))
@@ -479,6 +514,25 @@ def _stamp_power_transformer(
             primitive[:6, :6]
             - primitive[:6, 6:] @ np.linalg.pinv(primitive[6:, 6:]) @ primitive[6:, :6]
         )
+    return primitive
+
+
+def _stamp_power_transformer(
+    ybus: np.ndarray,
+    label_to_index: dict[BusPhaseLabel, int],
+    transformer: DistributionTransformer,
+    include_neutral: bool,
+) -> None:
+    phases, groups, connections = _power_transformer_layout(
+        transformer, include_neutral
+    )
+    rotation = _power_transformer_rotation(
+        transformer.equipment.vector_group, connections
+    )
+    electrical_data = _power_transformer_data(transformer, groups)
+    primitive = _power_transformer_primitive(
+        transformer, connections, rotation, electrical_data
+    )
     indices = [
         label_to_index[(bus.name, phase.value)]
         for bus in transformer.buses
