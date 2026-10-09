@@ -321,7 +321,9 @@ def _stamp_grounded_center_tap(
     ratios = polarity * voltages[0] / voltages / tap_values
     incidence = np.array([[1.0, -1.0, 0.0], [1.0, 0.0, -1.0]]) * ratios
     primitive = incidence.T @ np.linalg.solve(impedance, incidence)
-    primitive[1, 1] += no_load_loss / 100 * powers[0] / (voltages[1] * tap_values[1]) ** 2
+    primitive[1, 1] += (
+        no_load_loss / 100 * powers[0] / (voltages[1] * tap_values[1]) ** 2
+    )
     labels = [
         (transformer.buses[index].name, next(phase for phase in group if phase != "N"))
         for index, group in enumerate(phases)
