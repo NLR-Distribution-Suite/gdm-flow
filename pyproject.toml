@@ -32,7 +32,6 @@ plotting = ["plotly>=5.0"]
 mcp = ["mcp>=2.0.0"]
 opendss = ["opendssdirect.py>=0.9"]
 dev = [
-  "gdmloader",
   "pytest>=8.0",
   "pytest-cov>=5.0",
   "pre-commit>=3.7",
