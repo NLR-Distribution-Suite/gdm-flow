@@ -218,8 +218,5 @@ Redirect IEEE123Loads.DSS
 ! There are only two voltage bases in the problem: 4160V and 480V. These must be expressed in kV
 
 
-open Line.Sw7
-open Line.Sw8
- 
 Set VoltageBases = [4.16, 0.48]    ! ARRAY OF VOLTAGES IN KV
 CalcVoltageBases  ! PERFORMS ZERO LOAD POWER FLOW TO ESTIMATE VOLTAGE BASES

@@ -104,7 +104,7 @@ def _solve_opendss(
     Returns a dict keyed by (bus_name_lower, node_number) → complex pu voltage.
     """
     dss.Basic.ClearAll()
-    dss.Text.Command(f'Compile "{master_dss}"')
+    dss.Text.Command(f'Redirect "{master_dss}"')
     dss.Text.Command("BatchEdit RegControl..* enabled=no")
     dss.Text.Command("BatchEdit CapControl..* enabled=no")
 
@@ -197,7 +197,7 @@ def _verify_reference_center_tap_grounding(
     if not transformers:
         return
     reference = dss.NewContext()
-    reference.Text.Command(f'Compile "{master_dss}"')
+    reference.Text.Command(f'Redirect "{master_dss}"')
     names = {name.lower() for name in reference.Transformers.AllNames()}
     for transformer in transformers:
         assert transformer.name.lower() in names
@@ -222,10 +222,7 @@ def _verify_reference_center_tap_grounding(
 def model_data(request):
     """Provide (name, dss_path, system, tap_positions, cap_states) for each test model."""
     name, dss_path, gdm_path = request.param
-    try:
-        system = DistributionSystem.from_json(str(gdm_path))
-    except Exception as exc:
-        pytest.skip(f"Cannot load GDM model {gdm_path.name}: {exc}")
+    system = DistributionSystem.from_json(str(gdm_path))
     _verify_reference_center_tap_grounding(system, dss_path)
     aggregate_single_phase_transformers(system)
     tap_positions = _extract_tap_positions(system)
