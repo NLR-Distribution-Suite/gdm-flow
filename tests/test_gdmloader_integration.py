@@ -1,15 +1,15 @@
 import numpy as np
 
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 
-def test_gdmloader_can_download_distribution_system(p5r_system):
+def test_bundled_model_loads_distribution_system(p5r_system):
     assert isinstance(p5r_system, DistributionSystem)
     assert p5r_system.get_source_bus().name
 
 
-def test_gdmloader_compare_solvers(p5r_system):
-    """Run all solvers on downloaded model and compare results."""
+def test_bundled_model_compare_solvers(p5r_system):
+    """Run all solvers on the bundled model and compare results."""
     from gdm_flow.ac_opf import optimize_ac_power_flow_from_components
     from gdm_flow.ac_pf import solve_ac_power_flow_from_components
     from gdm_flow.lindistflow import solve_lindistflow

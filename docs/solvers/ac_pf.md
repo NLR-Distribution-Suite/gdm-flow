@@ -1,62 +1,68 @@
-# AC Power Flow (Fixed-Point Iteration)
+# AC Power Flow (Newton-Raphson)
 
-The AC PF solver implements an OpenDSS-style fixed-point iteration for distribution systems. Unlike the [AC OPF](ac_opf.md) which *optimises* voltage magnitudes within bounds, the AC PF solves the standard power-flow equations: given fixed P/Q injections at PQ buses and a fixed voltage at the slack bus, find the voltage magnitude and angle at every bus.
+The AC PF solver uses Newton-Raphson with a sparse Jacobian and backtracking.
+Unlike [AC OPF](ac_opf.md), which optimises voltage magnitudes within bounds,
+AC PF solves fixed P/Q injections at PQ buses and fixed slack-bus voltage.
 
 ## Formulation
 
-The solver works directly in SI units (volts, amps, siemens) — no per-unit conversion — to avoid the ill-conditioning that arises when nominal voltages span 120 V–40 kV (a 331:1 ratio causing Y-pu diagonal ratios exceeding 325 million).
+Inputs and returned voltages and powers use SI units. Internally, the solver
+scales the Y-bus and power specifications to per-unit using nominal
+phase-voltage bases and a common power base.
 
-### Fixed-Point Iteration
+### Newton-Raphson Iteration
 
-At each iteration, the current injection at each non-slack node is computed from the specified power and current voltage:
-
-$$
-I_i^{(k)} = \frac{\overline{S_i^{\text{spec}}}}{\overline{V_i^{(k)}}} \quad \forall i \notin \text{slack}
-$$
-
-The updated voltage is obtained by solving the linear system:
+At each iteration, calculate complex nodal power from the current voltage:
 
 $$
-V_{\text{ns}}^{(k+1)} = Y_{\text{ns}}^{-1} \left( I_{\text{ns}}^{(k)} - Y_{\text{ns,slack}} \cdot V_{\text{slack}} \right)
+S^{calc} = V \odot \overline{YV}.
 $$
 
-where $Y_{\text{ns}}$ is the Y-bus submatrix for non-slack nodes and $Y_{\text{ns,slack}}$ couples non-slack nodes to the fixed slack voltages.
-
-An acceleration factor $\alpha = 0.5$ damps the update:
+The stacked active/reactive mismatch at non-slack nodes defines a sparse Jacobian system for voltage-angle and magnitude corrections:
 
 $$
-V_{\text{ns}}^{(k+1)} = V_{\text{ns}}^{(k)} + \alpha \left( V_{\text{ns,calc}} - V_{\text{ns}}^{(k)} \right)
+J\Delta x = -\begin{bmatrix}\operatorname{Re}(S^{calc}-S^{spec}) \\
+\operatorname{Im}(S^{calc}-S^{spec})\end{bmatrix}.
 $$
+
+The Jacobian is rebuilt each iteration and solved with SciPy's sparse solver.
+Backtracking starts at a full step and halves it when mismatch does not improve.
 
 ### Convergence Criterion
 
-Convergence is measured by the maximum relative voltage change across all non-slack nodes:
+The largest absolute active or reactive power mismatch in per-unit must be
+below `tolerance`:
 
 $$
-\max_i \frac{|V_i^{(k+1)} - V_i^{(k)}|}{V_{\text{base},i}} < \text{tolerance}
+\max_{i \notin slack}\left\{|\Delta P_i|,|\Delta Q_i|\right\} < tolerance.
 $$
 
 ### Initial Voltage Estimate
 
-Rather than starting from a flat 1.0 pu profile, the solver builds an initial voltage by solving $V = Y^{-1} \cdot I_{\text{source}}$ with loads modeled as constant impedances. This direct solve accounts for all transformer ratios and connections, giving a physically correct starting point.
+Initialization uses nominal magnitudes, balanced A/B/C angles and S1/S2 angles
+propagated from each service transformer. Without an external warm start, the
+solver attempts a LinDistFlow magnitude estimate and falls back to nominal
+values if it fails. `v0_complex` overrides matching initial terminal voltages;
+an empty mapping skips automatic LinDistFlow initialization.
 
-## Key Features
+## Supported Scope
 
-- **SI-unit formulation** — avoids per-unit ill-conditioning across multi-voltage-level systems (120 V–40 kV)
-- **Sparse LU factorisation** — a single `scipy.sparse.linalg.splu` factorisation reused across all fixed-point iterations
-- **OpenDSS-style iteration** — no Jacobian construction; each iteration is a fast back-substitution
-- **Direct initial solve** — $V = Y^{-1} \cdot I$ with constant-impedance loads provides a physically correct warm start
-- **Neutral node support** — explicit neutral (N) nodes on split-phase secondary buses held at 0 V reference
-- **Split-phase angle initialization** — correct S1/S2 angle initialization for center-tapped transformers with propagation through secondary networks
-- **Connectivity detection** — unreachable nodes are automatically treated as slack to prevent singular systems
-- **External warm-start (QSTS)** — accepts `v0_complex` from a previous timestep for time-series simulation
+- Sparse Newton steps with per-unit internal scaling and SI-unit results.
+- Grounded split-phase services with opposite S1/S2 polarity and unequal leg loads.
+- Line-to-line loads using actual differential voltage and corresponding Jacobian terms.
+- External warm starts accepting complex terminal voltages from a prior solve.
+
+Explicit-neutral and floating-neutral split-phase stamping is unsupported.
+Component-based load evaluation uses constant P/Q, not ZIP coefficients.
+Solver convergence alone does not certify grounding metadata, thermal limits
+or independent agreement with an external feeder model.
 
 ## Usage
 
 ### Low-level interface
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import solve_ac_power_flow
 
 system = DistributionSystem.from_json("model.json")
@@ -76,7 +82,7 @@ print(result.max_mismatch_pu)
 ### Component-based interface
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import solve_ac_power_flow_from_components
 
 system = DistributionSystem.from_json("model.json")
@@ -92,7 +98,7 @@ result = solve_ac_power_flow_from_components(
 
 print(f"Converged: {result.success}")
 print(f"Iterations: {result.iterations}")
-print(f"Max voltage change: {result.max_mismatch_pu:.2e} pu")
+print(f"Max power mismatch: {result.max_mismatch_pu:.2e} pu")
 ```
 
 ## Result Object
@@ -107,15 +113,15 @@ print(f"Max voltage change: {result.max_mismatch_pu:.2e} pu")
 | `voltage` | `np.ndarray` | Complex bus voltages in SI volts |
 | `voltage_pu` | `np.ndarray` | Per-unit voltage magnitudes |
 | `power_injection` | `np.ndarray` | Complex power injection at each bus (W + j·var) |
-| `iterations` | `int` | Number of fixed-point iterations |
-| `max_mismatch_pu` | `float` | Final maximum per-unit voltage change |
+| `iterations` | `int` | Number of Newton-Raphson iterations |
+| `max_mismatch_pu` | `float` | Final maximum active/reactive power mismatch in per-unit |
 
 ## AC PF vs AC OPF
 
 | Aspect | AC PF | AC OPF |
 |--------|-------|--------|
-| **Method** | Fixed-point iteration (current injection) | Nonlinear least-squares (optimisation) |
-| **Units** | SI (volts, amps, siemens) | Per-unit |
+| **Method** | Newton-Raphson with backtracking | Nonlinear least-squares (optimisation) |
+| **Units** | SI inputs/results; per-unit internal solve | Per-unit |
 | **Slack bus** | Fixed at nominal voltage | Adjusted within bounds |
 | **Voltage bounds** | None — reports actual voltages | Enforced via `vm_min_pu` / `vm_max_pu` |
 | **Regulator targets** | Not modeled | Soft voltage targets via penalty |

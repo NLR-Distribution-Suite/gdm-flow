@@ -6,11 +6,11 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components.base.distribution_branch_base import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 from gdm_flow import (
     optimize_ac_power_flow_from_components,
     solve_dc_opf_from_components,

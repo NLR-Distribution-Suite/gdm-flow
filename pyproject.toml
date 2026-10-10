@@ -15,7 +15,7 @@ authors = [
 ]
 dependencies = [
   "numpy>=1.24",
-  "grid-data-models>=2.3.7",
+  "grid-data-models>=2.4.0",
   "typer>=0.9",
   "rich>=13.0",
   "scipy>=1.10"

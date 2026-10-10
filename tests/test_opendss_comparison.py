@@ -20,8 +20,8 @@ import pytest
 opendssdirect = pytest.importorskip("opendssdirect")
 import opendssdirect as dss  # noqa: E402
 
-from gdm.distribution import DistributionSystem  # noqa: E402
-from gdm.distribution.utils import aggregate_single_phase_transformers  # noqa: E402
+from gdm.systems.distribution import DistributionSystem  # noqa: E402
+from gdm.systems.distribution.utils import aggregate_single_phase_transformers  # noqa: E402
 
 from gdm_flow import (  # noqa: E402
     solve_lindistflow,
@@ -58,7 +58,7 @@ if _p4u_dss.exists() and _p4u_gdm.exists():
 
 def _extract_tap_positions(system: DistributionSystem) -> Dict[str, list[float]]:
     """Extract transformer tap positions from a GDM system."""
-    from gdm.distribution.components import DistributionTransformer
+    from gdm.systems.distribution.components import DistributionTransformer
 
     taps: Dict[str, list[float]] = {}
     for xfmr in system.get_components(DistributionTransformer):
@@ -74,7 +74,7 @@ def _extract_tap_positions(system: DistributionSystem) -> Dict[str, list[float]]
 
 def _extract_cap_states(system: DistributionSystem) -> Dict[str, list[bool]]:
     """Extract capacitor switch states from a GDM system."""
-    from gdm.distribution.components import DistributionCapacitor
+    from gdm.systems.distribution.components import DistributionCapacitor
 
     states: Dict[str, list[bool]] = {}
     for cap in system.get_components(DistributionCapacitor):
@@ -104,7 +104,7 @@ def _solve_opendss(
     Returns a dict keyed by (bus_name_lower, node_number) → complex pu voltage.
     """
     dss.Basic.ClearAll()
-    dss.Text.Command(f'Compile "{master_dss}"')
+    dss.Text.Command(f'Redirect "{master_dss}"')
     dss.Text.Command("BatchEdit RegControl..* enabled=no")
     dss.Text.Command("BatchEdit CapControl..* enabled=no")
 
@@ -179,6 +179,42 @@ def _get_common_buses(
     return matches
 
 
+def _verify_reference_center_tap_grounding(
+    system: DistributionSystem, master_dss: Path
+) -> None:
+    """Restore importer metadata only for source-verified grounded center taps."""
+    from gdm.systems.distribution.components import DistributionTransformer
+
+    transformers = [
+        transformer
+        for transformer in system.get_components(DistributionTransformer)
+        if any(
+            phase.value in {"S1", "S2"}
+            for group in transformer.winding_phases
+            for phase in group
+        )
+    ]
+    if not transformers:
+        return
+    reference = dss.NewContext()
+    reference.Text.Command(f'Redirect "{master_dss}"')
+    names = {name.lower() for name in reference.Transformers.AllNames()}
+    for transformer in transformers:
+        assert transformer.name.lower() in names
+        reference.Circuit.SetActiveElement(f"Transformer.{transformer.name}")
+        buses = reference.CktElement.BusNames()
+        nodes = reference.CktElement.NodeOrder()
+        conductors = reference.CktElement.NumConductors()
+        assert len(buses) == len(transformer.equipment.windings) == 3
+        for index in (1, 2):
+            assert (
+                buses[index].split(".", 1)[0].lower()
+                == transformer.buses[index].name.lower()
+            )
+            assert 0 in nodes[index * conductors : (index + 1) * conductors]
+            transformer.equipment.windings[index].is_grounded = True
+
+
 # ─── Fixtures ────────────────────────────────────────────────────────────────
 
 
@@ -186,10 +222,8 @@ def _get_common_buses(
 def model_data(request):
     """Provide (name, dss_path, system, tap_positions, cap_states) for each test model."""
     name, dss_path, gdm_path = request.param
-    try:
-        system = DistributionSystem.from_json(str(gdm_path))
-    except Exception as exc:
-        pytest.skip(f"Cannot load GDM model {gdm_path.name}: {exc}")
+    system = DistributionSystem.from_json(str(gdm_path))
+    _verify_reference_center_tap_grounding(system, dss_path)
     aggregate_single_phase_transformers(system)
     tap_positions = _extract_tap_positions(system)
     cap_states = _extract_cap_states(system)

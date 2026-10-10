@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Sequence
 
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 from .detect import detect_violations
 from .strategies import (

@@ -12,7 +12,7 @@ from typing import Annotated, Any
 
 import numpy as np
 import typer
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from mcp.server import Server
 from mcp import stdio_server
 from mcp_types import (
@@ -1168,7 +1168,7 @@ async def _handle_scale_loads(args: dict[str, Any]) -> dict[str, Any]:
     """Scale every load's power by ``load_scale`` and write the updated system."""
     from pathlib import Path
 
-    from gdm.distribution.components import DistributionLoad
+    from gdm.systems.distribution.components import DistributionLoad
 
     system_path = _get_system_path_arg(args)
     load_scale = float(args.get("load_scale", 1.0))

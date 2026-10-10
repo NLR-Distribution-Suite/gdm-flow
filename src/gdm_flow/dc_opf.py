@@ -8,14 +8,14 @@ import math
 
 import numpy as np
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBattery,
     DistributionBus,
     DistributionLoad,
     DistributionSolar,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from ._utils import _phase_name, _phase_voltage
 from .ybus import YBusResult, calculate_ybus

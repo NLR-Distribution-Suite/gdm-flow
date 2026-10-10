@@ -6,12 +6,12 @@ import math
 from dataclasses import dataclass, field
 from typing import Dict, Tuple
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import DistributionBus
-from gdm.distribution.components.base.distribution_branch_base import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import DistributionBus
+from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from .._utils import _phase_name, _phase_voltage
 

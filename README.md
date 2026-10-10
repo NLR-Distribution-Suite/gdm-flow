@@ -13,8 +13,9 @@ Utilities for OPF and power-flow style preprocessing on top of
 
 - **Y-Bus Construction** — Phase-domain admittance matrices from GDM components (branches, transformers, switches) with matrix and sequence impedance support
 - **Four Solvers** — AC OPF (nonlinear least-squares), AC PF (Newton-Raphson power flow), DC OPF (quadratic programming), and LinDistFlow (backward/forward sweep)
-- **Multi-Phase Support** — Full three-phase and split-phase (center-tapped transformer) modeling
+- **Multi-Phase Support** — Three-phase and grounded split-phase services; explicit/floating split-phase neutrals are unsupported
 - **Component Integration** — Direct integration with GDM loads, solar PV, batteries, capacitors, and regulators
+- **GDM 2.4 Equipment** — Lumped series reactors, static station switches, and connection-aware two-winding station transformers in the AC network model; see [equipment scope](docs/solvers/ybus.md#gdm-24-station-equipment)
 - **Interactive Dashboards** — Plotly-based HTML dashboards with voltage profiles, power flow, branch loading, losses, and equipment state
 - **QSTS Simulation** — Quasi-static time series with warm-starting across timesteps for any solver
 - **Multi-Period OPF** — Joint optimization across a time horizon with battery SOC coupling and ramp constraints (DC OPF and LinDistFlow)
@@ -25,21 +26,17 @@ Utilities for OPF and power-flow style preprocessing on top of
 
 ## Install
 
+Python 3.11+ and grid-data-models 2.4.0+ are required. Imports use the canonical
+`gdm.systems.distribution` namespace. Older external GDM JSON can still load
+through GDM's compatibility layer, which may emit a deprecation warning for
+legacy serialized module paths.
+
 ```bash
 pip install -e .
 ```
 
-If you also want sparse matrix return support:
-
-```bash
-pip install -e .[sparse]
-```
-
-If you want optimization support:
-
-```bash
-pip install -e '.[optimization]'
-```
+SciPy, sparse matrix support, and optimization solvers are included in the
+core installation.
 
 If you want interactive plotting dashboards:
 
@@ -50,7 +47,7 @@ pip install -e '.[plotting]'
 If you want to run the MCP server:
 
 ```bash
-pip install -e '.[mcp,optimization]'
+pip install -e '.[mcp]'
 gdm-flow-mcp-server
 ```
 
@@ -92,7 +89,7 @@ python examples/compare_plotly_results.py
 ## Usage
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import calculate_ybus
 
 system = DistributionSystem.from_json("path/to/system.json")
@@ -107,7 +104,7 @@ labels = result.index_to_label
 ## Optimization usage
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import optimize_ac_power_flow
 
 system = DistributionSystem.from_json("path/to/system.json")
@@ -131,7 +128,7 @@ If your model already contains `DistributionLoad` and `DistributionSolar` compon
 you can build nodal injections automatically:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import optimize_ac_power_flow_from_components
 
 system = DistributionSystem.from_json("path/to/system.json")
@@ -162,7 +159,7 @@ which *optimises* voltage magnitudes within bounds, the AC PF solves for exact b
 voltages given fixed P/Q injections and a slack bus:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import solve_ac_power_flow_from_components
 
 system = DistributionSystem.from_json("path/to/system.json")
@@ -187,7 +184,7 @@ for robust convergence on heavily loaded feeders.
 `gdm-flow` also includes a separate DC OPF module:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import solve_dc_opf_from_components
 
 system = DistributionSystem.from_json("path/to/system.json")
@@ -208,7 +205,7 @@ print(result.generator_dispatch_w)
 `gdm-flow` includes a separate radial LinDistFlow approximation module:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import solve_lindistflow
 
 system = DistributionSystem.from_json("path/to/system.json")
@@ -268,7 +265,7 @@ profiles. Two modes are available:
 Sequential snapshot solves at each timestep with automatic warm-starting:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import run_qsts
 
 system = DistributionSystem.from_json("model.json")

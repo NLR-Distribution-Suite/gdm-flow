@@ -52,7 +52,7 @@ DistributionSystem (GDM JSON)
 ## Quick Example
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import optimize_ac_power_flow_from_components
 
 system = DistributionSystem.from_json("model.json")

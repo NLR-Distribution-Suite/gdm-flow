@@ -63,7 +63,7 @@ Tables summarising the state of:
 You can also generate dashboards from Python:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 from gdm_flow import optimize_ac_power_flow_from_components
 from gdm_flow.ac_pf import solve_ac_power_flow_from_components
 from gdm_flow.dashboard import generate_dashboard

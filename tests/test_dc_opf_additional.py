@@ -6,14 +6,14 @@ import numpy as np
 import pytest
 from scipy import sparse as sp_sparse
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBattery,
     DistributionLoad,
     DistributionSolar,
     MatrixImpedanceBranch,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from gdm_flow import dc_opf
 from gdm_flow.dc_opf import DCGenerator

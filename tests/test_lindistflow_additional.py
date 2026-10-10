@@ -2,20 +2,33 @@ from __future__ import annotations
 
 import numpy as np
 import networkx as nx
+import pytest
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBattery,
     DistributionCapacitor,
     DistributionLoad,
+    DistributionReactor,
     DistributionSolar,
     DistributionVoltageSource,
     MatrixImpedanceBranch,
     MatrixImpedanceSwitch,
 )
-from gdm.distribution.enums import Phase, VoltageTypes
+from gdm.systems.distribution.enums import Phase, VoltageTypes
 
 from gdm_flow import lindistflow as ldf
+
+
+def test_lindistflow_reactor_impedance_is_lumped_and_validated():
+    reactor = DistributionReactor.example()
+    reactor.length = type(reactor.length)(250, "meter")
+    reactor.equipment.resistance = type(reactor.equipment.resistance)(0.5, "ohm")
+    assert ldf._branch_phase_impedance_ohm(reactor, "A") == (0.5, 1.0)
+    assert ldf._branch_phase_impedance_ohm(reactor, "S1") == (0.0, 0.0)
+    reactor.equipment.reactance = type(reactor.equipment.reactance)(-1, "ohm")
+    with pytest.raises(ValueError, match="Reactor.*impedance"):
+        ldf._branch_phase_impedance_ohm(reactor, "A")
 
 
 class _Q:

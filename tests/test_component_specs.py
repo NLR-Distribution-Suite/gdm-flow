@@ -1,14 +1,14 @@
 import pytest
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionCapacitor,
     DistributionLoad,
     DistributionRegulator,
     DistributionSolar,
     MatrixImpedanceBranch,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 from gdm.quantities import ActivePower, ReactivePower, Voltage
 
 from gdm_flow import (

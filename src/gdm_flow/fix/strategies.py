@@ -6,11 +6,11 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionTransformer,
 )
-from gdm.distribution.components.base.distribution_branch_base import (
+from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
 
@@ -64,7 +64,7 @@ class AdjustRegulatorTapStrategy(FixStrategy):
     def apply(
         self, system: DistributionSystem, report: "ViolationReport"
     ) -> list[FixAction]:
-        from gdm.distribution.components.distribution_regulator import (
+        from gdm.systems.distribution.components.distribution_regulator import (
             DistributionRegulator,
         )
 
@@ -141,12 +141,12 @@ class AddCapacitorStrategy(FixStrategy):
     def apply(
         self, system: DistributionSystem, report: "ViolationReport"
     ) -> list[FixAction]:
-        from gdm.distribution.components import DistributionCapacitor
+        from gdm.systems.distribution.components import DistributionCapacitor
 
         actions: list[FixAction] = []
 
         # Get buses already controlled by regulators (skip those)
-        from gdm.distribution.components.distribution_regulator import (
+        from gdm.systems.distribution.components.distribution_regulator import (
             DistributionRegulator,
         )
 

@@ -1,20 +1,20 @@
 # Solver Overview
 
-GDM-Flow provides four power flow solvers, each suited to different analysis needs. All operate on `DistributionSystem` objects from grid-data-models and share the same Y-bus construction infrastructure.
+GDM-Flow provides four power flow solvers, each suited to different analysis needs. All operate on `DistributionSystem` objects from grid-data-models. AC PF, AC OPF, and DC OPF share Y-bus construction; LinDistFlow extracts branch impedances and transformer ratios directly.
 
 ## Solver Comparison
 
 | Feature | AC OPF | AC PF | DC OPF | LinDistFlow |
 |---------|--------|-------|--------|-------------|
-| **Formulation** | Nonlinear least-squares | Fixed-point iteration (OpenDSS-style) | Quadratic program | Backward/forward sweep |
-| **Variables** | $V_m$, $\theta$ (per-unit) | $V$ (SI, complex) | $P_g$, $\theta$ | $V^2$, $P$, $Q$ |
+| **Formulation** | Nonlinear least-squares | Sparse Newton-Raphson | Quadratic program | Backward/forward sweep |
+| **Variables** | $V_m$, $\theta$ (per-unit) | $V_m$, $\theta$ (per-unit internally) | $P_g$, $\theta$ | $V^2$, $P$, $Q$ |
 | **Losses** | Full $I^2R$ losses | Full $I^2R$ losses | Neglected | Neglected |
 | **Reactive Power** | Full Q modeling | Full Q modeling | Neglected | Modeled |
 | **Network Topology** | Meshed or radial | Meshed or radial | Meshed or radial | Radial only |
 | **Economic Dispatch** | No | No | Yes (generation costs) | No |
 | **Speed** | Moderate (~300 ms) | Moderate (~200 ms) | Moderate (~400 ms) | Fast (~2 ms) |
 | **Accuracy** | Highest | Highest | Approximate | Approximate |
-| **Center-Tapped Transformers** | Full support (polarity-aware) | Full support (polarity-aware) | Limited (small-angle violation) | Full support (directed graph) |
+| **Center-Tapped Transformers** | Grounded services (polarity-aware) | Grounded services (polarity-aware) | Excluded (small-angle violation) | Directed-graph approximation |
 
 ## When to Use Each Solver
 
@@ -24,14 +24,17 @@ Use when you need **accurate voltages and losses**. The AC solver finds complex 
 - Loss analysis
 - Detailed power quality assessment
 
-### AC PF (Fixed-Point Iteration)
+### AC PF (Newton-Raphson)
 Use when you need **classical power flow** with fixed P/Q injections and a slack bus. Unlike the AC OPF which optimises voltage magnitudes within bounds, the AC PF solves the standard power-flow equations directly. Best for:
 - Baseline power flow studies
 - Validating AC OPF results against a traditional solver
 - Steady-state analysis with known load/generation profiles
-- Cases where you want exact bus voltages without optimization bounds
+- Cases where you want solved bus voltages without optimization bounds
 
-Features SI-unit formulation (avoids per-unit ill-conditioning across voltage levels), sparse LU factorisation of the Y-bus, and a direct initial solve ($V = Y^{-1} \cdot I$) for a physically correct warm start.
+Uses SI-unit inputs/results, per-unit internal scaling, sparse Jacobian solves
+and backtracking. Initialization accepts external complex voltages or attempts
+a LinDistFlow magnitude estimate. Grounded center-tapped services are supported;
+explicit/floating split-phase neutrals are not.
 
 ### DC OPF
 Use when you need **economic dispatch with generation costs**. The DC solver minimizes total generation cost subject to linearized power balance constraints. Best for:
@@ -47,12 +50,24 @@ Use when you need **fast voltage drop estimates** on radial feeders. LinDistFlow
 - Large-scale parametric sweeps
 - Hosting capacity analysis
 
+## GDM 2.4 Equipment Scope
+
+Reactors use lumped series impedance, including in LinDistFlow. Station breaker,
+disconnector, and earthing-switch equipment use the supplied matrix-switch model
+and static phase states; protection trips and fault interruption are not simulated.
+AC solvers use the connection-aware two-winding station-transformer primitive,
+including vector-group orientation and internal floating STAR neutral elimination.
+DC OPF remains a small-angle approximation, not an independently validated
+station-transformer dispatch model. LinDistFlow remains a magnitude/ratio
+approximation and does not solve transformer phase shifts or floating neutrals.
+See [Y-Bus Construction](ybus.md) for supported equipment and rejected layouts.
+
 ## Common Workflow
 
 All solvers follow the same pattern:
 
 ```python
-from gdm.distribution import DistributionSystem
+from gdm.systems.distribution import DistributionSystem
 
 # 1. Load the system
 system = DistributionSystem.from_json("model.json")

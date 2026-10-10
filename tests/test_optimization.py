@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import MatrixImpedanceBranch
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import MatrixImpedanceBranch
 
 from gdm_flow import optimize_ac_power_flow
 

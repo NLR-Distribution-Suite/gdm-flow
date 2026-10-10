@@ -8,7 +8,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
@@ -31,8 +35,11 @@ jobs:
         if: matrix.python-version == '3.12'
         uses: codecov/codecov-action@v7.1.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
+          use_oidc: ${{ github.event_name != 'pull_request' }}
+          override_branch: ${{ github.event_name == 'pull_request' && format('pr{0}:{1}', github.event.pull_request.number, github.head_ref) || github.ref_name }}
+          files: ./coverage.xml
+          disable_search: true
+          fail_ci_if_error: true
           verbose: true
 
   lint:

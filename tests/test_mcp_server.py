@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sqlite3
+from pathlib import Path
 
 import pytest
 
@@ -27,9 +28,10 @@ def test_mcp_list_tools_includes_documentation_tools():
     assert "get_opf_api_reference" in tool_names
 
 
-def test_mcp_documentation_tools_smoke():
-    if not mcp_server.DOCS_ROOT.exists():
-        pytest.skip("docs/ not available in this environment")
+def test_mcp_documentation_tools_smoke(monkeypatch):
+    docs_root = Path(__file__).resolve().parents[1] / "docs"
+    assert docs_root.is_dir()
+    monkeypatch.setattr(mcp_server, "DOCS_ROOT", docs_root)
     listing = asyncio.run(mcp_server._handle_list_opf_documentation({}))
     assert listing["count"] > 0
     assert "intro.md" in listing["files"]

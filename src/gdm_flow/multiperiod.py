@@ -18,8 +18,8 @@ from typing import Sequence
 
 import numpy as np
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBattery,
     DistributionBus,
 )

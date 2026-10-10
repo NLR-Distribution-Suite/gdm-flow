@@ -7,22 +7,26 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Dict, Tuple
 
-from gdm.distribution import DistributionSystem
-from gdm.distribution.components import (
+from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.components import (
     DistributionBattery,
     DistributionBus,
     DistributionCapacitor,
     DistributionLoad,
+    DistributionReactor,
     DistributionSolar,
     DistributionTransformer,
 )
-from gdm.distribution.components.distribution_regulator import DistributionRegulator
-from gdm.distribution.components.base.distribution_branch_base import (
+from gdm.systems.distribution.components.distribution_regulator import (
+    DistributionRegulator,
+)
+from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
-from gdm.distribution.enums import Phase
+from gdm.systems.distribution.enums import Phase
 
 from ._utils import _phase_name, _phase_voltage
+from .ybus import _reactor_impedance_ohm
 
 BusPhaseLabel = Tuple[str, str]
 BranchPhaseLabel = Tuple[str, str]
@@ -141,6 +145,11 @@ def _branch_phase_impedance_ohm(
     branch: DistributionBranchBase,
     phase: str,
 ) -> tuple[float, float]:
+    if isinstance(branch, DistributionReactor):
+        if phase not in [_phase_name(phase) for phase in branch.phases]:
+            return 0.0, 0.0
+        impedance = _reactor_impedance_ohm(branch)
+        return impedance.real, impedance.imag
     # Matrix impedance branch family
     if hasattr(branch, "equipment") and hasattr(branch.equipment, "r_matrix"):
         if phase not in [_phase_name(p) for p in branch.phases]:
@@ -257,7 +266,7 @@ def solve_lindistflow(
     """Solve radial LinDistFlow approximation for bus-phase voltages and branch flows."""
 
     if convert_geometry_to_matrix:
-        from gdm.distribution.components import GeometryBranch
+        from gdm.systems.distribution.components import GeometryBranch
 
         if any(True for _ in system.get_components(GeometryBranch)):
             system.convert_geometry_to_matrix_representation()
