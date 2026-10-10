@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gdm-flow"
-version = "0.4.0"
+version = "0.5.0"
 
 description = "Power flow utilities for grid-data-models distribution systems"
 readme = "README.md"
