@@ -17,6 +17,9 @@ from gdm.systems.distribution.components import (
     DistributionSolar,
     DistributionTransformer,
 )
+from gdm.systems.distribution.components.base.distribution_transformer_base import (
+    DistributionTransformerBase,
+)
 from gdm.systems.distribution.components.distribution_regulator import (
     DistributionRegulator,
 )
@@ -24,6 +27,7 @@ from gdm.systems.distribution.components.base.distribution_branch_base import (
     DistributionBranchBase,
 )
 from gdm.systems.distribution.enums import Phase
+from gdm.systems.substation.components import PrimaryEquipmentComponent
 
 from ._utils import _phase_name, _phase_voltage
 from .ybus import _reactor_impedance_ohm
@@ -218,9 +222,10 @@ _PHASE_ANGLE_RAD: dict[str, float] = {
 
 
 def _transformer_phase_impedance_and_ratio(
-    transformer: DistributionTransformer,
+    transformer: DistributionTransformerBase,
     winding_idx: int = 1,
     num_secondary: int = 1,
+    reverse: bool = False,
 ) -> tuple[float, float, float]:
     """Return ``(r_ohm, x_ohm, turns_ratio)`` for a transformer winding pair.
 
@@ -234,10 +239,12 @@ def _transformer_phase_impedance_and_ratio(
     if len(transformer.equipment.windings) < 2:
         return 0.0, 0.0, 1.0
 
-    w_u = transformer.equipment.windings[0]
-    w_v = transformer.equipment.windings[
-        min(winding_idx, len(transformer.equipment.windings) - 1)
-    ]
+    windings = transformer.equipment.windings
+    if reverse and len(windings) == 2:
+        w_u, w_v = windings[1], windings[0]
+    else:
+        w_u = windings[0]
+        w_v = windings[min(winding_idx, len(windings) - 1)]
 
     v_u = _phase_voltage(w_u.rated_voltage, w_u.voltage_type)
     v_v = _phase_voltage(w_v.rated_voltage, w_v.voltage_type)
@@ -283,6 +290,24 @@ def solve_lindistflow(
     source_bus = system.get_source_bus()
 
     digraph = system.get_directed_graph(return_radial_network=True)
+    all_bus_names = {
+        bus.name for bus in system.get_components(DistributionBus)
+    }
+    unreachable_bus_names = all_bus_names - set(digraph.nodes)
+    if unreachable_bus_names:
+        return LinDistFlowResult(
+            success=False,
+            message=(
+                f"LinDistFlow cannot solve {len(unreachable_bus_names)} bus(es) "
+                "disconnected from the source bus."
+            ),
+            source_bus=source_bus.name,
+            voltage_v={},
+            p_flow_w={},
+            q_flow_var={},
+            p_net_w=dict(p_net_w),
+            q_net_var=dict(q_net_var),
+        )
 
     phase_by_bus: dict[str, list[str]] = {}
     nominal_v_by_bus_phase: dict[BusPhaseLabel, float] = {}
@@ -294,7 +319,8 @@ def solve_lindistflow(
             nominal_v_by_bus_phase[(bus.name, p)] = v_phase
 
     edge_branch: dict[tuple[str, str], DistributionBranchBase] = {}
-    edge_transformer: dict[tuple[str, str], DistributionTransformer] = {}
+    edge_transformer: dict[tuple[str, str], DistributionTransformerBase] = {}
+    edge_ideal: dict[tuple[str, str], PrimaryEquipmentComponent] = {}
 
     for u, v in digraph.edges():
         data = digraph.get_edge_data(u, v)
@@ -323,12 +349,22 @@ def solve_lindistflow(
                         continue
                 edge_branch[(u, v)] = component
             elif isinstance(
-                component, (DistributionTransformer, DistributionRegulator)
+                component,
+                (DistributionTransformerBase, DistributionTransformer, DistributionRegulator),
             ):
                 if component.in_service:
                     edge_transformer[(u, v)] = component
+            elif isinstance(component, PrimaryEquipmentComponent):
+                buses = getattr(component, "buses", None)
+                if len(buses or []) != 2 or not getattr(component, "in_service", True):
+                    continue
+                edge_ideal[(u, v)] = component
 
-    all_modeled_edges = set(edge_branch.keys()) | set(edge_transformer.keys())
+    all_modeled_edges = (
+        set(edge_branch.keys())
+        | set(edge_transformer.keys())
+        | set(edge_ideal.keys())
+    )
 
     parent_of: dict[str, str] = {}
     children_of: dict[str, list[str]] = defaultdict(list)
@@ -343,6 +379,8 @@ def solve_lindistflow(
         edge_name[(u, v)] = br.name
     for (u, v), xf in edge_transformer.items():
         edge_name[(u, v)] = xf.name
+    for (u, v), equipment in edge_ideal.items():
+        edge_name[(u, v)] = equipment.name
 
     postorder_nodes = list(
         reversed(
@@ -369,7 +407,8 @@ def solve_lindistflow(
         parent = parent_of[bus]
         branch = edge_branch.get((parent, bus))
         xfmr = edge_transformer.get((parent, bus))
-        if branch is None and xfmr is None:
+        ideal_equipment = edge_ideal.get((parent, bus))
+        if branch is None and xfmr is None and ideal_equipment is None:
             continue
 
         comp_name = edge_name[(parent, bus)]
@@ -382,7 +421,7 @@ def solve_lindistflow(
                 for p in phase_by_bus.get(bus, [])
                 if p in phase_by_bus.get(parent, []) and p in branch_phases
             ]
-        else:
+        elif xfmr is not None:
             # Transformer: use common winding phases
             xfmr_phases = [
                 _phase_name(p)
@@ -409,6 +448,16 @@ def solve_lindistflow(
                             if pn != "N":
                                 ct_secs.add(pn)
                     phases = [p for p in phase_by_bus.get(bus, []) if p in ct_secs]
+        else:
+            equipment_phases = {
+                _phase_name(phase) for phase in ideal_equipment.phases
+            }
+            phases = [
+                phase
+                for phase in phase_by_bus.get(bus, [])
+                if phase in phase_by_bus.get(parent, [])
+                and phase in equipment_phases
+            ]
 
         for ph in phases:
             net_p = float(p_net_w.get((bus, ph), 0.0))
@@ -441,7 +490,8 @@ def solve_lindistflow(
         parent = parent_of[bus]
         branch = edge_branch.get((parent, bus))
         xfmr = edge_transformer.get((parent, bus))
-        if branch is None and xfmr is None:
+        ideal_equipment = edge_ideal.get((parent, bus))
+        if branch is None and xfmr is None and ideal_equipment is None:
             continue
 
         comp_name = edge_name[(parent, bus)]
@@ -503,7 +553,7 @@ def solve_lindistflow(
                     r, x = _branch_phase_impedance_ohm(branch, ph)
                     dp = r * pf + x * qf
                     voltage_v[(bus, ph)] = max(v_parent - dp / max(v_parent, 1.0), 1.0)
-        else:
+        elif xfmr is not None:
             xfmr_phases = [
                 _phase_name(p)
                 for p in xfmr.winding_phases[0]
@@ -550,18 +600,48 @@ def solve_lindistflow(
                     _, w_idx = ct_sec_map[ph]
                     num_sec = len(xfmr.equipment.windings) - 1
                     r, x, a = _transformer_phase_impedance_and_ratio(
-                        xfmr, w_idx, num_sec
+                        xfmr,
+                        w_idx,
+                        num_sec,
+                        reverse=parent != xfmr.buses[0].name,
                     )
                 else:
-                    r, x, a = _transformer_phase_impedance_and_ratio(xfmr)
+                    r, x, a = _transformer_phase_impedance_and_ratio(
+                        xfmr, reverse=parent != xfmr.buses[0].name
+                    )
                 # Transformer: V_sec ≈ V_pri/a - (r*P + x*Q) / (V_pri * a)
                 dp = r * pf + x * qf
                 v_child = v_parent / a - dp / (max(v_parent, 1.0) * a)
                 voltage_v[(bus, ph)] = max(v_child, 1.0)
+        else:
+            equipment_phases = {
+                _phase_name(phase) for phase in ideal_equipment.phases
+            }
+            phases = [
+                phase
+                for phase in phase_by_bus.get(bus, [])
+                if phase in phase_by_bus.get(parent, [])
+                and phase in equipment_phases
+            ]
+            for phase in phases:
+                voltage_v[(bus, phase)] = voltage_v.get(
+                    (parent, phase), nominal_v_by_bus_phase[(parent, phase)]
+                )
 
+    required_voltage_labels = set(nominal_v_by_bus_phase)
+    missing_voltage_labels = required_voltage_labels - set(voltage_v)
+    success = not missing_voltage_labels
+    message = (
+        "LinDistFlow solved on radial directed graph."
+        if success
+        else (
+            "LinDistFlow incomplete: no voltage was calculated for "
+            f"{len(missing_voltage_labels)} bus-phase node(s)."
+        )
+    )
     return LinDistFlowResult(
-        success=True,
-        message="LinDistFlow solved on radial directed graph.",
+        success=success,
+        message=message,
         source_bus=source_bus.name,
         voltage_v=dict(voltage_v),
         p_flow_w=dict(p_flow),
