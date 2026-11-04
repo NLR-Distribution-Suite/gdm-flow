@@ -13,6 +13,7 @@ from typing import Annotated, Any
 import numpy as np
 import typer
 from gdm.systems.distribution import DistributionSystem
+from gdm.systems.distribution.upgrade_handler.upgrade_handler import UpgradeHandler
 from mcp.server import Server
 from mcp import stdio_server
 from mcp_types import (
@@ -122,7 +123,9 @@ def _load_system(system_path: str) -> DistributionSystem:
     path = Path(system_path)
     if not path.exists():
         raise FileNotFoundError(f"System JSON file not found: {system_path}")
-    return DistributionSystem.from_json(str(path))
+    return DistributionSystem.from_json(
+        str(path), upgrade_handler=UpgradeHandler().upgrade
+    )
 
 
 def _resolve_model_ref_to_path(model_ref: dict[str, Any]) -> str:

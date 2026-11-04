@@ -3,7 +3,7 @@
 ## Requirements
 
 - Python ≥ 3.11
-- [grid-data-models](https://github.com/NLR-Distribution-Suite/grid-data-models) >= 2.4.0
+- [grid-data-models](https://github.com/NLR-Distribution-Suite/grid-data-models) >= 2.4.1
 
 ## Install from Source
 

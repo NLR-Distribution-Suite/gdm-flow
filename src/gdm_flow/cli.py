@@ -26,6 +26,7 @@ from rich.table import Table
 from gdm.systems.distribution import DistributionSystem
 from gdm.systems.distribution.components import DistributionBus
 from gdm.systems.distribution.enums import Phase
+from gdm.systems.distribution.upgrade_handler.upgrade_handler import UpgradeHandler
 
 from ._utils import _phase_name
 from .ac_opf import build_regulator_voltage_limits_from_components
@@ -58,7 +59,9 @@ def _load_system(model: Path) -> DistributionSystem:
         err_console.print(f"[red]Error:[/] file not found: {model}")
         raise typer.Exit(1)
     with console.status("[cyan]Loading model…"):
-        system = DistributionSystem.from_json(str(model))
+        system = DistributionSystem.from_json(
+            str(model), upgrade_handler=UpgradeHandler().upgrade
+        )
 
     # Auto-aggregate parallel single-phase transformers/regulators
     from collections import defaultdict

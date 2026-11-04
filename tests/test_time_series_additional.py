@@ -28,7 +28,7 @@ from gdm_flow.time_series import (
 )
 
 
-MODEL_PATH = Path("examples/models/p5r.json")
+MODEL_PATH = Path(__file__).resolve().parents[1] / "examples/models/p5r.json"
 
 
 @pytest.fixture()

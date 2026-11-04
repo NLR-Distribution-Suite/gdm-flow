@@ -10,6 +10,7 @@ magnitudes and angles are within acceptable tolerances.
 from __future__ import annotations
 
 import math
+import os
 from pathlib import Path
 from typing import Dict, Tuple
 
@@ -22,6 +23,7 @@ import opendssdirect as dss  # noqa: E402
 
 from gdm.systems.distribution import DistributionSystem  # noqa: E402
 from gdm.systems.distribution.utils import aggregate_single_phase_transformers  # noqa: E402
+from gdm.systems.distribution.upgrade_handler.upgrade_handler import UpgradeHandler  # noqa: E402
 
 from gdm_flow import (  # noqa: E402
     solve_lindistflow,
@@ -104,7 +106,11 @@ def _solve_opendss(
     Returns a dict keyed by (bus_name_lower, node_number) → complex pu voltage.
     """
     dss.Basic.ClearAll()
-    dss.Text.Command(f'Redirect "{master_dss}"')
+    original_directory = Path.cwd()
+    try:
+        dss.Text.Command(f'Redirect "{master_dss}"')
+    finally:
+        os.chdir(original_directory)
     dss.Text.Command("BatchEdit RegControl..* enabled=no")
     dss.Text.Command("BatchEdit CapControl..* enabled=no")
 
@@ -151,6 +157,14 @@ def _solve_opendss(
             )
 
     return voltages
+
+
+def test_solve_opendss_preserves_working_directory(tmp_path, monkeypatch):
+    if not _ieee13_dss.exists():
+        pytest.skip("IEEE 13 OpenDSS model not found")
+    monkeypatch.chdir(tmp_path)
+    _solve_opendss(_ieee13_dss)
+    assert Path.cwd() == tmp_path
 
 
 def _phase_to_node(phase_str: str) -> int | None:
@@ -222,7 +236,9 @@ def _verify_reference_center_tap_grounding(
 def model_data(request):
     """Provide (name, dss_path, system, tap_positions, cap_states) for each test model."""
     name, dss_path, gdm_path = request.param
-    system = DistributionSystem.from_json(str(gdm_path))
+    system = DistributionSystem.from_json(
+        str(gdm_path), upgrade_handler=UpgradeHandler().upgrade
+    )
     _verify_reference_center_tap_grounding(system, dss_path)
     aggregate_single_phase_transformers(system)
     tap_positions = _extract_tap_positions(system)
@@ -246,7 +262,7 @@ class TestACPowerFlowVsOpenDSS:
         name, dss_path, system, tap_positions, cap_states = model_data
 
         if name == "ieee-123":
-            return  # regulator model not yet matched
+            pytest.skip("IEEE 123 regulator model not yet matched")
 
         # Solve with OpenDSS using same tap/cap state as GDM
         opendss_v = _solve_opendss(dss_path, tap_positions, cap_states)
@@ -324,7 +340,7 @@ class TestLinDistFlowVsOpenDSS:
         name, dss_path, system, tap_positions, cap_states = model_data
 
         if name == "ieee-123":
-            return  # open-switch bus matching not yet handled
+            pytest.skip("IEEE 123 open-switch bus matching not yet handled")
 
         opendss_v = _solve_opendss(dss_path, tap_positions, cap_states)
 

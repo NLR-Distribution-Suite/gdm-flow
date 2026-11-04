@@ -123,12 +123,25 @@ def test_load_system_reads_existing_json(tmp_path, monkeypatch):
 
     sentinel = _FakeSystem()
 
-    def _fake_from_json(path: str):
+    def _fake_from_json(path: str, *, upgrade_handler):
         assert path == str(model)
+        assert upgrade_handler.__self__.__class__.__name__ == "UpgradeHandler"
         return sentinel
 
     monkeypatch.setattr(DistributionSystem, "from_json", staticmethod(_fake_from_json))
     assert cli._load_system(model) is sentinel
+
+
+def test_load_system_upgrades_older_model():
+    model = Path(__file__).parent / "data/ieee-13/gdm/ieee13_system.json"
+    system = cli._load_system(model)
+    assert system.get_source_bus() is not None
+
+
+def test_load_ieee123_fixture():
+    model = Path(__file__).parent / "data/ieee-123/gdm/ieee_123_node.json"
+    system = cli._load_system(model)
+    assert system.get_source_bus() is not None
 
 
 def test_run_dc_aggregates_dispatch(monkeypatch):

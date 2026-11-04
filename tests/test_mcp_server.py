@@ -28,6 +28,26 @@ def test_mcp_list_tools_includes_documentation_tools():
     assert "get_opf_api_reference" in tool_names
 
 
+def test_load_system_uses_upgrade_handler(tmp_path, monkeypatch):
+    model = tmp_path / "model.json"
+    model.write_text("{}")
+    sentinel = object()
+
+    def fake_from_json(path, *, upgrade_handler):
+        assert path == str(model)
+        assert upgrade_handler.__self__.__class__.__name__ == "UpgradeHandler"
+        return sentinel
+
+    monkeypatch.setattr(mcp_server.DistributionSystem, "from_json", fake_from_json)
+    assert mcp_server._load_system(str(model)) is sentinel
+
+
+def test_load_system_upgrades_older_model():
+    model = Path(__file__).parent / "data/ieee-13/gdm/ieee13_system.json"
+    system = mcp_server._load_system(str(model))
+    assert system.get_source_bus() is not None
+
+
 def test_mcp_documentation_tools_smoke(monkeypatch):
     docs_root = Path(__file__).resolve().parents[1] / "docs"
     assert docs_root.is_dir()
